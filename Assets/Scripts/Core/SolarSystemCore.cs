@@ -324,5 +324,4 @@ namespace SolarSystem.Core
             public const Objects centerOfOrbit = Objects.Earth;
         }
     }
-
 }
