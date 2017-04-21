@@ -36,3 +36,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+/Assets/*.meta
+/Assets/Scripts/SolarMathModel.cs.meta
+/Assets/Scripts/*.meta
+/Assets/Scripts/*.meta
+/Assets/Scripts/Objects/*.meta
+/Assets/Scripts/Core/*.meta
