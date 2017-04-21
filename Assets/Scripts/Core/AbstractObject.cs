@@ -33,6 +33,11 @@ namespace SolarSystem.Core
         //protected in constructor
         protected abstract void initialize();
 
+        public AbstractObject()
+        {
+            initialize();
+        }
+
         /// <summary>
         /// returns radius
         /// </summary>
