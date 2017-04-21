@@ -1,6 +1,6 @@
 ﻿using SolarSystem.Core;
 
-namespace SolarSystem
+namespace SolarSystem.MathObjects
 {
     //simple factory
     public static class MathObjectsFactory
