@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using SolarSystem.Interfaces;
+using SolarSystem.Core;
 
 namespace SolarSystem.Objects3D
 {
@@ -14,22 +15,47 @@ namespace SolarSystem.Objects3D
         {
             visualObjects = new List<IVisualSolarObject>();
 
-            //create objects from enum
-            for (int i = 0; i < 11; ++i)
+            var count = (int)Objects.SaturnRing;
+
+            //create sun
+            var sun = SolarBuilder.createSun();
+            var sunObj = sun.GetComponent<IVisualSolarObject>();
+
+            if (sunObj != null)
             {
-                Core.Objects obj = (Core.Objects)i;
+                sunObj.setSolarType(Objects.Sun);
+                sun.name = Objects.Sun.ToString();
 
-                //try to load from resources
-                var loadedObject = Resources.Load<GameObject>(obj.ToString());
+                //renderer
+                sunObj.getRenderer().material.mainTexture = Resources.Load<Texture2D>("Textures/sunmap");
 
-                if (loadedObject)
+                //add sun to container
+                visualObjects.Add(sunObj);
+            }
+
+            //create objects from enum
+            for (int i = 1; i < count; ++i)
+            {
+                Objects obj = (Objects)i;
+
+                //create planets
+                var planet = SolarBuilder.createPlanet();
+                var visualObj = planet.GetComponent<IVisualSolarObject>();
+
+                if (visualObj != null)
                 {
-                    var visualObject = loadedObject.GetComponent<IVisualSolarObject>();
+                    visualObj.setSolarType(obj);
+                    planet.name = obj.ToString();
 
-                    if (visualObject != null)
-                        visualObjects.Add(visualObject);
+                    //config renderer
+                    rendererTexture(visualObj);
+
+                    //add planet to container
+                    visualObjects.Add(visualObj);
                 }
             }
+
+            //planets options
         }
 
         /// <summary>
@@ -46,7 +72,7 @@ namespace SolarSystem.Objects3D
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public IVisualSolarObject getObject(Core.Objects obj)
+        public IVisualSolarObject getObject(Objects obj)
         {
             IVisualSolarObject searchedObject = null;
 
@@ -55,6 +81,61 @@ namespace SolarSystem.Objects3D
             });
 
             return searchedObject;
+        }
+
+        /// <summary>
+        /// Sets texture for each planet
+        /// </summary>
+        /// <param name="obj"></param>
+        private void rendererTexture(IVisualSolarObject obj)
+        {
+            var renderer = obj.getRenderer();
+
+            switch(obj.objectType())
+            {
+                case Objects.Earth:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/earthmap");
+                    break;
+
+                case Objects.Mercury:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/mercurymap");
+                    break;
+
+                case Objects.Venus:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/venusmap");
+                    break;
+
+                case Objects.Mars:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/marsmap");
+                    break;
+
+                case Objects.Jupiter:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/jupitermap");
+                    break;
+
+                case Objects.Saturn:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/saturnmap");
+                    break;
+
+                case Objects.Uranus:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/uranusmap");
+                    break;
+
+                case Objects.Neptune:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/neptunemap");
+                    break;
+
+                case Objects.Pluto:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/plutomap");
+                    break;
+
+                case Objects.Moon:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/moonmap");
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }
