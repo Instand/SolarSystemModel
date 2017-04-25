@@ -55,7 +55,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Mercury.M2;
                 _period = ObjectsValues.Mercury.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Mercury;
             }
         }
 
@@ -81,7 +81,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Venus.M2;
                 _period = ObjectsValues.Venus.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Venus;
             }
         }
 
@@ -107,7 +107,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Earth.M2;
                 _period = ObjectsValues.Earth.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Earth;
             }
         }
 
@@ -133,7 +133,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Mars.M2;
                 _period = ObjectsValues.Mars.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Mars;
             }
         }
 
@@ -159,7 +159,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Jupiter.M2;
                 _period = ObjectsValues.Jupiter.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Jupiter;
             }
         }
 
@@ -185,7 +185,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Saturn.M2;
                 _period = ObjectsValues.Saturn.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Saturn;
             }
         }
 
@@ -211,7 +211,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Uranus.M2;
                 _period = ObjectsValues.Uranus.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Uranus;
             }
         }
 
@@ -237,7 +237,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Neptune.M2;
                 _period = ObjectsValues.Neptune.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Neptune;
             }
         }
     }
@@ -266,7 +266,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Pluto.M2;
                 _period = ObjectsValues.Pluto.period;
                 _centerOfOrbit = Objects.Sun;
-                _objectType = Objects.Sun;
+                _objectType = Objects.Pluto;
             }
         }
     }
@@ -295,7 +295,7 @@ namespace SolarSystem.MathObjects
                 _M2 = ObjectsValues.Moon.M2;
                 _period = ObjectsValues.Moon.period;
                 _centerOfOrbit = Objects.Earth;
-                _objectType = Objects.Earth;
+                _objectType = Objects.Moon;
             }
         }
     }
