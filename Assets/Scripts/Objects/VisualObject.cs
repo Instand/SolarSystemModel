@@ -30,5 +30,23 @@ namespace SolarSystem.Interfaces
         /// </summary>
         /// <returns></returns>
         IVisualSolarObject buddy();
+
+        /// <summary>
+        /// Returns gameobject of object
+        /// </summary>
+        /// <returns></returns>
+        GameObject getGameObject();
+
+        /// <summary>
+        /// Returns object transform
+        /// </summary>
+        /// <returns></returns>
+        Transform getTransform();
+
+        /// <summary>
+        /// Returns renderer
+        /// </summary>
+        /// <returns></returns>
+        MeshRenderer getRenderer();
     }
 }
