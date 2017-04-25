@@ -45,6 +45,39 @@ namespace SolarSystem.Model
         private static double uranusRingInnerRadius = 0;
         private static double uranusRingOuterRadius = 0;
 
+        //3d container
+        private static Objects3D.SolarObjectsContainer solarSystemObjects;
+
+        static SolarMathModel()
+        {
+            solarSystemObjects = new Objects3D.SolarObjectsContainer();
+
+            //calculating start time
+            startD = 367 * year - 7 * (year + (month + 9) / 12) / 4 + 275 * month / 9 + day - 730530;
+            startD += calculateUT(hours, minutes, seconds);
+            oldTimeD = startD;
+            currentTimeD = startD;
+
+            //calcualting saturn and uranus rings
+            var saturn = AbstractObjectsContainer.solarObject(Objects.Saturn);
+
+            if (saturn != null)
+            {
+                saturnRingOuterRadius = saturn.radius() + Values.saturnOuterRadius;
+                saturnRingInnerRadius = saturn.radius() + 6.630;
+            }
+
+            var uranus = AbstractObjectsContainer.solarObject(Objects.Uranus);
+
+            if (uranus != null)
+            {
+                uranusRingOuterRadius = uranus.radius() + Values.uranusOuterRadius;
+                uranusRingInnerRadius = uranus.radius() + 2.0;
+            }
+
+            Debug.Log("Math model created");
+        }
+
         //helpers
         private static float calculateTimeScale(int year, int month, int day)
         {
@@ -286,7 +319,75 @@ namespace SolarSystem.Model
                 solarObj.setRoll((solarObj.roll() + deltaTimeD / solarObj.period() * 360.0));
 
                 //recalculation to 3D objects
+                Interfaces.IVisualSolarObject visualObj = solarSystemObjects.getObject(obj);
+
+                if (visualObj != null)
+                {
+                    visualObj.getTransform().position = new Vector3((float)solarObj.x(), (float)solarObj.y(), (float)solarObj.z());
+                    visualObj.getTransform().rotation = Quaternion.AngleAxis((float)solarObj.tilt(), Values.tiltAxis) * Quaternion.AngleAxis((float)solarObj.roll(), Values.rollAxis);
+                }
             }
+        }
+
+        /// <summary>
+        /// Sets solar system scale
+        /// </summary>
+        /// <param name="scale"></param>
+        /// <param name="focused"></param>
+        public static void changeSolarSystemScale(float scale, bool focused = false)
+        {
+            changeObjectsScale(scale, focused);
+
+            var scaling = planetScale;
+
+            foreach (var planet in solarSystemObjects.objects())
+            {
+                var type = planet.objectType();
+                var s = 0.0f;
+
+                switch (type)
+                {
+                    case Objects.Sun:
+                        s = SolarParser.parseSolarObjectsRadius(type) * scaling / 80.0f;
+                        planet.getTransform().localScale = new Vector3(s, s, s);
+                        break;
+
+                    case Objects.Mercury:
+                    case Objects.Venus:
+                    case Objects.Earth:
+                    case Objects.Mars:
+                    case Objects.Jupiter:
+                    case Objects.Saturn:
+                    case Objects.Uranus:
+                    case Objects.Neptune:
+                    case Objects.Pluto:
+                    case Objects.Moon:
+                        s = SolarParser.parseSolarObjectsRadius(type) * scaling;
+                        planet.getTransform().localScale = new Vector3(s, s, s);
+                        break;
+
+                    case Objects.SaturnRing:
+                        saturnRingOuterRadius = saturnRingOuterRadius * scaling;
+                        saturnRingInnerRadius = saturnRingInnerRadius * scaling;
+                        break;
+
+                    case Objects.UranusRing:
+                        uranusRingInnerRadius = uranusRingInnerRadius * scaling;
+                        uranusRingOuterRadius = uranusRingOuterRadius * scaling;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets current solar system speed
+        /// </summary>
+        /// <param name="speed"></param>
+        public static void setSolarSystemSpeed(float speed)
+        {
+            daysPerFrameScale = speed;
         }
 
         /// <summary>
