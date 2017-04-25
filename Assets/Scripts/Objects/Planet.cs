@@ -14,12 +14,14 @@ namespace SolarSystem.Objects3D
         private IVisualSolarObject buddyObject = null;
         private GameObject baseObject = null;
         private Transform baseTransform = null;
+        private MeshRenderer baseRenderer = null;
 
         //hash and setup
         private void Awake()
         {
             baseObject = gameObject;
             baseTransform = transform;
+            baseRenderer = GetComponent<MeshRenderer>();
         }
 
         /// <summary>
@@ -74,6 +76,15 @@ namespace SolarSystem.Objects3D
         public Transform getTransform()
         {
             return baseTransform;
+        }
+
+        /// <summary>
+        /// Returns renderer
+        /// </summary>
+        /// <returns></returns>
+        public MeshRenderer getRenderer()
+        {
+            return baseRenderer;
         }
     }
 }
