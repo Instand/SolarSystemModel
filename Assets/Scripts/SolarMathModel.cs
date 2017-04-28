@@ -53,7 +53,7 @@ namespace SolarSystem.Model
             solarSystemObjects = new Objects3D.SolarObjectsContainer();
 
             //calculating start time
-            startD = 367 * year - 7 * (year + (month + 9) / 12) / 4 + 275 * month / 9 + day - 730530;
+            startD = 367 * year - 7.0f * (year + (month + 9.0f) / 12.0f) / 4.0f + 275.0f * month / 9.0f + day - 730530.0f;
             startD += calculateUT(hours, minutes, seconds);
             oldTimeD = startD;
             currentTimeD = startD;
@@ -74,14 +74,24 @@ namespace SolarSystem.Model
                 uranusRingOuterRadius = uranus.radius() + Values.uranusOuterRadius;
                 uranusRingInnerRadius = uranus.radius() + 2.0;
             }
+        }
 
-            Debug.Log("Math model created");
+        //get list of 3d objects
+        public static List<Interfaces.IVisualSolarObject> objects3D()
+        {
+            return solarSystemObjects.objects();
+        }
+
+        //get container
+        public static Objects3D.SolarObjectsContainer container3D()
+        {
+            return solarSystemObjects;
         }
 
         //helpers
         private static float calculateTimeScale(int year, int month, int day)
         {
-            return 367 * year - 7 * (year + (month + 9) / 12) / 4 + 275 * month / 9 + day - 730530;
+            return 367.0f * year - 7.0f * (year + (month + 9.0f) / 12.0f) / 4.0f + 275.0f * month / 9.0f + day - 730530.0f;
         }
 
         private static float calculateUT(int h, int m, float s)
@@ -285,7 +295,7 @@ namespace SolarSystem.Model
                         var a = solarObj.a1() + solarObj.a2() * currentTimeD;
                         var e = solarObj.e1() + solarObj.e2() * currentTimeD;
                         var M = (solarObj.M1() + solarObj.M2() * currentTimeD) * Mathf.PI / 180;
-                        var E = M + e * Math.Sin(M) * (1.0 + e * Math.Cos((float)M));
+                        var E = M + e * Math.Sin(M) * (1.0 + e * Math.Cos(M));
 
                         var xv = a * (Math.Sin(E) - e);
                         var yv = a * (Math.Sqrt(1.0 - e * e) * Math.Sin(E));
