@@ -36,8 +36,8 @@ namespace SolarSystem.Model
         private static int focusedMinimumScale = 20;
         private static double actualScale = 0;
         private static double ultraSpeed = 1.0;
-        private static float ultraSpeedStep = 2.0f;
-        private static double ultraSpeedMax = 64.0;
+        /*private static float ultraSpeedStep = 2.0f;
+        private static double ultraSpeedMax = 64.0;*/
 
         //inner and outer radius
         private static double saturnRingInnerRadius = 0;
@@ -147,7 +147,6 @@ namespace SolarSystem.Model
 
             switch (obj)
             {
-
                 case Objects.Mercury:
                     outerRadius += ObjectsValues.Mercury.radius;
                     break;
@@ -287,17 +286,18 @@ namespace SolarSystem.Model
                     case Objects.Uranus:
                     case Objects.Neptune:
                     case Objects.Pluto:
+                    case Objects.Moon:
 
                         // Calculate the planet orbital elements from the current time in days
-                        var N = (solarObj.N1() + solarObj.N2() * currentTimeD) * Mathf.PI / 180;
-                        var iPlanet = (solarObj.i1() + solarObj.i2() * currentTimeD) * Mathf.PI / 180;
-                        var w = (solarObj.w1() + solarObj.w2() * currentTimeD) * Mathf.PI / 180;
+                        var N = (solarObj.N1() + solarObj.N2() * currentTimeD) * Math.PI / 180;
+                        var iPlanet = (solarObj.i1() + solarObj.i2() * currentTimeD) * Math.PI / 180;
+                        var w = (solarObj.w1() + solarObj.w2() * currentTimeD) * Math.PI / 180;
                         var a = solarObj.a1() + solarObj.a2() * currentTimeD;
                         var e = solarObj.e1() + solarObj.e2() * currentTimeD;
-                        var M = (solarObj.M1() + solarObj.M2() * currentTimeD) * Mathf.PI / 180;
+                        var M = (solarObj.M1() + solarObj.M2() * currentTimeD) * Math.PI / 180;
                         var E = M + e * Math.Sin(M) * (1.0 + e * Math.Cos(M));
 
-                        var xv = a * (Math.Sin(E) - e);
+                        var xv = a * (Math.Cos(E) - e);
                         var yv = a * (Math.Sqrt(1.0 - e * e) * Math.Sin(E));
                         var v = Math.Atan2(yv, xv);
 
@@ -306,10 +306,8 @@ namespace SolarSystem.Model
 
                         // From http://www.davidcolarusso.com/astro/
                         // Modified to compensate for the right handed coordinate system of OpenGL
-                        var xh = r * (Math.Cos(N) * Math.Cos(v + w)
-                                       - Math.Sin(N) * Math.Sin(v + w) * Math.Cos(iPlanet));
-                        var zh = -r * (Math.Sin(N) * Math.Cos(v + w)
-                                        + Math.Cos(N) * Math.Sin(v + w) * Math.Cos(iPlanet));
+                        var xh = r * (Math.Cos(N) * Math.Cos(v + w) - Math.Sin(N) * Math.Sin(v + w) * Math.Cos(iPlanet));
+                        var zh = -r * (Math.Sin(N) * Math.Cos(v + w) + Math.Cos(N) * Math.Sin(v + w) * Math.Cos(iPlanet));
                         var yh = r * (Math.Sin(w + v) * Math.Sin(iPlanet));
 
                         // Apply the position offset from the center of orbit to the bodies
@@ -334,7 +332,37 @@ namespace SolarSystem.Model
                 if (visualObj != null)
                 {
                     visualObj.getTransform().position = new Vector3((float)solarObj.x(), (float)solarObj.y(), (float)solarObj.z());
-                    visualObj.getTransform().rotation = Quaternion.AngleAxis((float)solarObj.tilt(), Values.tiltAxis) * Quaternion.AngleAxis((float)solarObj.roll(), Values.rollAxis);
+                    visualObj.getTransform().rotation = Quaternion.AngleAxis(-(float)solarObj.tilt(), Values.tiltAxis) * Quaternion.AngleAxis((float)solarObj.roll(), Values.rollAxis);
+                }
+            }
+            else
+            {
+                //rings calculation
+                switch (obj)
+                {
+                    case Objects.SaturnRing:
+
+                        //saturn ring 3d
+                        var saturnRing = solarSystemObjects.getObject(obj);
+
+                        //saturn
+                        var saturn = saturnRing.buddy();
+
+                        if (saturnRing != null && saturn != null)
+                        {
+                            //calculate data
+                            var scale = (float)(saturnRingInnerRadius + saturnRingOuterRadius) / 1.75f;
+                            var roll = saturn.getTransform().rotation.y / 10.0f;
+
+                            //set data
+                            saturnRing.getTransform().position = new Vector3(saturn.getTransform().position.x, saturn.getTransform().position.y, saturn.getTransform().position.z);
+                            saturnRing.getTransform().rotation = saturn.getTransform().rotation;// * Quaternion.AngleAxis(roll, Values.rollAxis);
+                            saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
+                        }
+
+                        break;
+                    default:
+                        break;
                 }
             }
         }
