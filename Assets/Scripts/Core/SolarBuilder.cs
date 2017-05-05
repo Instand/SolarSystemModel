@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SolarSystem.Objects3D;
 
 namespace SolarSystem.Core
 {
@@ -14,18 +15,21 @@ namespace SolarSystem.Core
         public static GameObject createPlanet()
         {
             //new obj
-            var obj = new GameObject();
+            var planet = new GameObject();
 
-            createSphere(obj);
+            createSphere(planet);
 
             //add renderer
-            var renderer = obj.AddComponent<MeshRenderer>();
+            var renderer = planet.AddComponent<MeshRenderer>();
             renderer.material = Resources.Load<Material>("Materials/PlanetMaterial");
 
-            //add planet
-            obj.AddComponent<Objects3D.Planet>();
+            //add script
+            planet.AddComponent<Object3D>();
 
-            return obj;
+            //add collider
+            planet.AddComponent<SphereCollider>();
+
+            return planet;
         }
 
         /// <summary>
@@ -35,18 +39,39 @@ namespace SolarSystem.Core
         public static GameObject createSun()
         {
             //new obj
-            var obj = new GameObject();
+            var sun = new GameObject();
 
-            createSphere(obj);
+            createSphere(sun);
 
             //add renderer
-            var renderer = obj.AddComponent<MeshRenderer>();
+            var renderer = sun.AddComponent<MeshRenderer>();
             renderer.material = Resources.Load<Material>("Materials/SunMaterial");
 
-            //add planet
-            obj.AddComponent<Objects3D.Planet>();
+            //add script
+            sun.AddComponent<Object3D>();
 
-            return obj;
+            //add collider
+            sun.AddComponent<SphereCollider>();
+
+            return sun;
+        }
+
+        /// <summary>
+        /// Creates planets ring
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject createRing()
+        {
+            //new ring
+            var ring = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Ring")) as GameObject;
+
+            //add material
+            ring.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/RingMaterial");
+
+            //add script
+            ring.AddComponent<Object3D>();
+
+            return ring;
         }
 
         /// <summary>
