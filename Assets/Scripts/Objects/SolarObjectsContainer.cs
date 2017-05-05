@@ -55,7 +55,25 @@ namespace SolarSystem.Objects3D
                 }
             }
 
-            //planets options
+            //create rings
+            var saturnRing = SolarBuilder.createRing();
+            var saturnRingInterface = saturnRing.GetComponent<IVisualSolarObject>();
+
+            if (saturnRingInterface != null)
+            {
+                saturnRingInterface.setSolarType(Objects.SaturnRing);
+                saturnRing.name = Objects.SaturnRing.ToString();
+
+                //buddy
+                var saturn = getObject(Objects.Saturn);
+
+                if (saturn != null)
+                    saturnRingInterface.setBuddy(saturn);
+
+                //config renderer + add object
+                rendererTexture(saturnRingInterface);
+                visualObjects.Add(saturnRingInterface);
+            }
         }
 
         /// <summary>
@@ -131,6 +149,10 @@ namespace SolarSystem.Objects3D
 
                 case Objects.Moon:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/moonmap");
+                    break;
+
+                case Objects.SaturnRing:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/saturnring");
                     break;
 
                 default:
