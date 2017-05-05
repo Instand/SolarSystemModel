@@ -356,7 +356,7 @@ namespace SolarSystem.Model
 
                             //set data
                             saturnRing.getTransform().position = new Vector3(saturn.getTransform().position.x, saturn.getTransform().position.y, saturn.getTransform().position.z);
-                            saturnRing.getTransform().rotation = saturn.getTransform().rotation;// * Quaternion.AngleAxis(roll, Values.rollAxis);
+                            saturnRing.getTransform().rotation = saturn.getTransform().rotation;
                             saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
                         }
 
