@@ -55,7 +55,7 @@ namespace SolarSystem.Objects3D
                 }
             }
 
-            //create rings
+            //create saturn ring
             var saturnRing = SolarBuilder.createRing();
             var saturnRingInterface = saturnRing.GetComponent<IVisualSolarObject>();
 
@@ -73,6 +73,25 @@ namespace SolarSystem.Objects3D
                 //config renderer + add object
                 rendererTexture(saturnRingInterface);
                 visualObjects.Add(saturnRingInterface);
+            }
+
+            //create uranus ring
+            var uranusRing = SolarBuilder.createRing();
+            var uranusRingInterface = uranusRing.GetComponent<IVisualSolarObject>();
+
+            if (uranusRingInterface != null)
+            {
+                uranusRingInterface.setSolarType(Objects.UranusRing);
+                uranusRing.name = Objects.UranusRing.ToString();
+
+                //buddy
+                var uranus = getObject(Objects.Uranus);
+
+                if (uranus != null)
+                    uranusRingInterface.setBuddy(uranus);
+
+                rendererTexture(uranusRingInterface);
+                visualObjects.Add(uranusRingInterface);
             }
         }
 
@@ -153,6 +172,10 @@ namespace SolarSystem.Objects3D
 
                 case Objects.SaturnRing:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/saturnring");
+                    break;
+
+                case Objects.UranusRing:
+                    renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/uranusring");
                     break;
 
                 default:
