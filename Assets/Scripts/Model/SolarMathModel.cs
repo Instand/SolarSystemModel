@@ -356,7 +356,7 @@ namespace SolarSystem.Model
 
                             //set data
                             saturnRing.getTransform().position = saturn.getTransform().position;
-                            saturnRing.getTransform().rotation = Quaternion.Euler(saturn.getTransform().rotation.x, saturn.getTransform().rotation.y, roll);
+                            saturnRing.getTransform().rotation = saturn.getTransform().rotation;
                             saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
                         }
 
@@ -378,7 +378,7 @@ namespace SolarSystem.Model
 
                             //set data
                             uranusRing.getTransform().position = uranus.getTransform().position;
-                            uranusRing.getTransform().rotation = Quaternion.Euler(uranus.getTransform().rotation.x, roll, uranus.getTransform().rotation.y);
+                            uranusRing.getTransform().rotation = uranus.getTransform().rotation;
                             uranusRing.getTransform().localScale = new Vector3(scale, scale, scale);
                         }
 
