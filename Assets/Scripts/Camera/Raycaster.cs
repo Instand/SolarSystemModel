@@ -18,7 +18,7 @@ namespace SolarSystem.Controller
             solarView = Camera.main;
         }
 
-        // Update is called once per frame
+        // every frame
         private void Update()
         {
             //check mouse press
