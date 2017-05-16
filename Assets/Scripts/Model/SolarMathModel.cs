@@ -38,6 +38,8 @@ namespace SolarSystem.Model
         private static double ultraSpeed = 1.0;
         /*private static float ultraSpeedStep = 2.0f;
         private static double ultraSpeedMax = 64.0;*/
+        private const float saturnRingScale = 1.95f;
+        private const float uranusRingScale = 1.75f;
 
         //inner and outer radius
         private static double saturnRingInnerRadius = 0;
@@ -351,7 +353,7 @@ namespace SolarSystem.Model
                         if (saturnRing != null && saturn != null)
                         {
                             //calculate data
-                            var scale = (float)(saturnRingInnerRadius + saturnRingOuterRadius) / 1.75f;
+                            var scale = (float)(saturnRingInnerRadius + saturnRingOuterRadius) / saturnRingScale;
                             var roll = saturn.getTransform().rotation.y / 10.0f;
 
                             //set data
@@ -373,7 +375,7 @@ namespace SolarSystem.Model
                         if (uranus != null && uranusRing != null)
                         {
                             //calculate data
-                            var scale = (float)(uranusRingInnerRadius + uranusRingOuterRadius) / 1.75f;
+                            var scale = (float)(uranusRingInnerRadius + uranusRingOuterRadius) / uranusRingScale;
                             var roll = uranus.getTransform().rotation.y / 10.0f;
 
                             //set data
