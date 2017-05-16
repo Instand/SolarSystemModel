@@ -355,9 +355,31 @@ namespace SolarSystem.Model
                             var roll = saturn.getTransform().rotation.y / 10.0f;
 
                             //set data
-                            saturnRing.getTransform().position = new Vector3(saturn.getTransform().position.x, saturn.getTransform().position.y, saturn.getTransform().position.z);
-                            saturnRing.getTransform().rotation = saturn.getTransform().rotation;
+                            saturnRing.getTransform().position = saturn.getTransform().position;
+                            saturnRing.getTransform().rotation = Quaternion.Euler(saturn.getTransform().rotation.x, saturn.getTransform().rotation.y, roll);
                             saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
+                        }
+
+                        break;
+
+                    case Objects.UranusRing:
+
+                        //uranus ring 3d
+                        var uranusRing = solarSystemObjects.getObject(obj);
+
+                        //uranus
+                        var uranus = uranusRing.buddy();
+
+                        if (uranus != null && uranusRing != null)
+                        {
+                            //calculate data
+                            var scale = (float)(uranusRingInnerRadius + uranusRingOuterRadius) / 1.75f;
+                            var roll = uranus.getTransform().rotation.y / 10.0f;
+
+                            //set data
+                            uranusRing.getTransform().position = uranus.getTransform().position;
+                            uranusRing.getTransform().rotation = Quaternion.Euler(uranus.getTransform().rotation.x, roll, uranus.getTransform().rotation.y);
+                            uranusRing.getTransform().localScale = new Vector3(scale, scale, scale);
                         }
 
                         break;
