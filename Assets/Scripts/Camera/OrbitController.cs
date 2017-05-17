@@ -8,7 +8,7 @@ namespace SolarSystem.Controller
     public class OrbitController : MonoBehaviour
     {
         //The target of the camera. The camera will always point to this object.
-        private Transform target;
+        private Vector3 target;
 
         //The default distance of the camera from the target.
         [SerializeField]
@@ -18,9 +18,17 @@ namespace SolarSystem.Controller
         [SerializeField]
         private float zoomValue = 35000.0f;
 
+        [SerializeField]
+        private float minZoomValue = 70000.0f;
+
+        [SerializeField]
+        private float maxZoomValue = Core.Values.solarDistance;
+
         //The position of the cursor on the screen. Used to rotate the camera.
         private float x = 0.0f;
         private float y = 0.0f;
+        private float xTemp = 0;
+        private float yTemp = 0;
 
         //Distance vector. 
         private Vector3 distance;
@@ -40,10 +48,25 @@ namespace SolarSystem.Controller
         private string mouseY = "Mouse Y";
         private string mouseWheel = "Mouse ScrollWheel";
 
-        //target to orbit from
-        public void setTarget(Transform target)
+        [SerializeField]
+        private bool isMobile = false;
+
+        [SerializeField]
+        private float sensivity = 0.4f;
+        private Vector3 startPoint;
+        private Vector3 nextPoint;
+
+        //target property
+        public Vector3 Target
         {
-            this.target = target;
+            set
+            {
+                target = value;
+            }
+            get
+            {
+                return target;
+            }
         }
 
         //set zoom value
@@ -71,11 +94,8 @@ namespace SolarSystem.Controller
         //after every frame
         private void LateUpdate()
         {
-            if (target)
-            {
-                rotateControls();
-                zoom();
-            }
+            rotateControls();
+            zoom();
         }
 
         /**
@@ -84,13 +104,63 @@ namespace SolarSystem.Controller
          */
         private void rotateControls()
         {
-            //right button
-            if (Input.GetMouseButton(1))
+            if (!isMobile)
             {
-                x += Input.GetAxis(mouseX) * lookSpeedValue;
-                y += Input.GetAxis(mouseY) * lookSpeedValue;
+                if (Input.GetMouseButton(1))
+                {
+                    x += Input.GetAxis(mouseX) * lookSpeedValue;
+                    y += Input.GetAxis(mouseY) * lookSpeedValue;
 
-                rotate(x, y);
+                    rotate(x, y);
+                }
+            } else
+            {
+                if (Input.touchCount > 0)
+                {
+                    if (Input.GetTouch(0).phase == TouchPhase.Began)
+                    {
+                        startPoint = Input.GetTouch(0).position;
+                        xTemp = x;
+                        yTemp = y;
+                    }
+
+                    if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+                    {
+                        nextPoint = Input.GetTouch(0).position;
+
+                        x = xTemp + (nextPoint.x - startPoint.x) * 180.0f / Screen.width;
+                        y = yTemp - (nextPoint.y - startPoint.y) * 90.0f / Screen.height;
+
+                        rotate(x, y);
+                    }
+                    else if (Input.touchCount == 2)
+                    {
+                        float pinchAmount = 0;
+                        Quaternion desiredRotation = transform.rotation;
+
+                        DetectTouch.Calculate();
+
+                        if (Mathf.Abs(DetectTouch.pinchDistanceDelta) > 0)
+                        {
+                            pinchAmount = DetectTouch.pinchDistanceDelta;
+
+                            if (DetectTouch.pinchDistanceDelta >= 0)
+                            {
+                                if (Vector3.Distance(transform.position, target) > minZoomValue)
+                                    distanceValue -= pinchAmount * sensivity;
+                            }
+                            else
+                            {
+                                if (Vector3.Distance(transform.position, target) < maxZoomValue)
+                                    distanceValue += Mathf.Abs(pinchAmount) * sensivity;
+                            }
+
+                            distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                        }
+
+                        transform.position += transform.forward * pinchAmount * sensivity;
+                    }
+                }
             }
         }
 
@@ -105,7 +175,7 @@ namespace SolarSystem.Controller
 
             //The new position is the target position + the distance vector of the camera
             //rotated at the specified angle.
-            Vector3 position = rotation * distance + target.position;
+            Vector3 position = rotation * distance + target;
 
             //Update the rotation and position of the camera.
             transform.rotation = rotation;
@@ -117,13 +187,12 @@ namespace SolarSystem.Controller
          */
         private void zoom()
         {
-            if (Input.GetAxis(mouseWheel) < 0.0f)
+            if (!isMobile)
             {
-                zoomOut();
-            }
-            else if (Input.GetAxis(mouseWheel) > 0.0f)
-            {
-                zoomIn();
+                if (Input.GetAxis(mouseWheel) < 0.0f)
+                    zoomOut();
+                else if (Input.GetAxis(mouseWheel) > 0.0f)
+                    zoomIn();
             }
         }
 
@@ -133,9 +202,12 @@ namespace SolarSystem.Controller
          */
         private void zoomIn()
         {
-            distanceValue -= zoomValue;
-            distance = new Vector3(0.0f, 0.0f, -distanceValue);
-            rotate(x, y);
+            if ((distanceValue - zoomValue) > minZoomValue)
+            {
+                distanceValue -= zoomValue;
+                distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                rotate(x, y);
+            }
         }
 
         /**
@@ -144,9 +216,12 @@ namespace SolarSystem.Controller
          */
         private void zoomOut()
         {
-            distanceValue += zoomValue;
-            distance = new Vector3(0.0f, 0.0f, -distanceValue);
-            rotate(x, y);
+            if ((distanceValue + zoomValue) < maxZoomValue)
+            {
+                distanceValue += zoomValue;
+                distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                rotate(x, y);
+            }
         }
     }
 }
