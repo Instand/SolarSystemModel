@@ -4,6 +4,8 @@ using UnityEngine;
 using SolarSystem.Core;
 using SolarSystem.MathObjects;
 using System;
+using SolarSystem.Controller;
+using SolarSystem.Objects3D;
 
 namespace SolarSystem.Model
 {
@@ -48,11 +50,14 @@ namespace SolarSystem.Model
         private static double uranusRingOuterRadius = 0;
 
         //3d container
-        private static Objects3D.SolarObjectsContainer solarSystemObjects;
+        private static SolarObjectsContainer solarSystemObjects;
+
+        //solar view
+        private static OrbitController cameraController = null;
 
         static SolarMathModel()
         {
-            solarSystemObjects = new Objects3D.SolarObjectsContainer();
+            solarSystemObjects = new SolarObjectsContainer();
 
             //calculating start time
             startD = 367 * year - 7.0f * (year + (month + 9.0f) / 12.0f) / 4.0f + 275.0f * month / 9.0f + day - 730530.0f;
@@ -76,6 +81,8 @@ namespace SolarSystem.Model
                 uranusRingOuterRadius = uranus.radius() + Values.uranusOuterRadius;
                 uranusRingInnerRadius = uranus.radius() + 2.0;
             }
+
+            cameraController = Camera.main.GetComponent<OrbitController>();
         }
 
         //get list of 3d objects
@@ -85,7 +92,7 @@ namespace SolarSystem.Model
         }
 
         //get container
-        public static Objects3D.SolarObjectsContainer container3D()
+        public static SolarObjectsContainer container3D()
         {
             return solarSystemObjects;
         }
@@ -468,6 +475,92 @@ namespace SolarSystem.Model
         public static void setDeltaTime(float dt)
         {
             deltaTime = dt;
+        }
+
+        /// <summary>
+        /// Calculates addition limit
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        private static float calculateZoomLimit(Objects obj, float limit)
+        {
+            var finalLimit = limit;
+
+            switch (obj)
+            {
+                case Objects.Sun:
+                    finalLimit = cameraController.DefaultZoomLimit;
+                    break;
+
+                case Objects.Mercury:
+                    finalLimit *= 2.0f;
+                    break;
+
+                case Objects.Jupiter:
+                    finalLimit /= 1.5f;
+                    break;
+
+                case Objects.Pluto:
+                    finalLimit *= 1.5f;
+                    break;
+
+                default:
+                    break;
+            }
+
+            return finalLimit;
+        }
+
+        /// <summary>
+        /// Calculates zoom limit for object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private static float calculateZoomLimit(Objects obj)
+        {
+            var solarObjRadius = SolarParser.parseSolarObjectsRadius(obj);
+            var zoomLimit = planetScale * solarObjRadius * 4.0f;
+
+            //empiric calculations
+            return calculateZoomLimit(obj, zoomLimit);
+        }
+
+        /// <summary>
+        /// Returns default view pos of solar object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static Vector3 viewPositionOfObject(Objects obj)
+        {
+            var solarObj = solarSystemObjects.getObject(obj);
+            var pos = Vector3.zero;
+
+            if (solarObj != null)
+            {
+                var solarObjPos = solarObj.getTransform().position;
+
+                //vector on object
+                var onSolarObject = solarObjPos - cameraController.Camera.transform.position;
+
+                //get dist
+                var dist = onSolarObject.magnitude;
+
+                //calculate need dist to camera
+                var limit = calculateZoomLimit(obj);
+                var needDist = dist - limit;
+
+                if (needDist <= 0)
+                    needDist = limit - dist;
+
+                //get position
+                var onTargetLimit = onSolarObject.normalized * needDist;
+
+                //get need cam pos
+                pos = onTargetLimit + cameraController.Camera.transform.position;
+            }
+
+            return pos;
         }
     }
 }
