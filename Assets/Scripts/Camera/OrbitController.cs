@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SolarSystem.Controller
 {
@@ -55,6 +56,10 @@ namespace SolarSystem.Controller
         private float sensivity = 0.4f;
         private Vector3 startPoint;
         private Vector3 nextPoint;
+        private Camera mainCamera;
+
+        //controller state
+        private bool active = true;
 
         //target property
         public Vector3 Target
@@ -69,6 +74,50 @@ namespace SolarSystem.Controller
             }
         }
 
+        //distance property
+        private Vector3 Distance
+        {
+            set
+            {
+                distance = value;
+            }
+            get
+            {
+                return distance;
+            }
+        }
+
+        //default zoom limit
+        public float DefaultZoomLimit
+        {
+            get
+            {
+                return defaultZoomLimitValue;
+            }
+        }
+
+        //camera
+        public Camera Camera
+        {
+            get
+            {
+                return mainCamera;
+            }
+        }
+
+        //activation
+        private bool Active
+        {
+            get
+            {
+                return active;
+            }
+            set
+            {
+                active = value;
+            }
+        }
+
         //set zoom value
         public void setZoomValue(float value)
         {
@@ -79,6 +128,8 @@ namespace SolarSystem.Controller
         private void Start()
         {
             distance = new Vector3(0.0f, 0.0f, -distanceValue);
+
+            mainCamera = GetComponent<Camera>();
 
             zoomLimitValue = defaultZoomLimitValue;
             zoomOutLimitValue = zoomLimitValue;
@@ -94,8 +145,11 @@ namespace SolarSystem.Controller
         //after every frame
         private void LateUpdate()
         {
-            rotateControls();
-            zoom();
+            if (active)
+            {
+                rotateControls();
+                zoom();
+            }
         }
 
         /**
@@ -113,52 +167,56 @@ namespace SolarSystem.Controller
 
                     rotate(x, y);
                 }
-            } else
+            }
+            else
             {
-                if (Input.touchCount > 0)
+                if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
                 {
-                    if (Input.GetTouch(0).phase == TouchPhase.Began)
+                    if (Input.touchCount > 0)
                     {
-                        startPoint = Input.GetTouch(0).position;
-                        xTemp = x;
-                        yTemp = y;
-                    }
-
-                    if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
-                    {
-                        nextPoint = Input.GetTouch(0).position;
-
-                        x = xTemp + (nextPoint.x - startPoint.x) * 180.0f / Screen.width;
-                        y = yTemp - (nextPoint.y - startPoint.y) * 90.0f / Screen.height;
-
-                        rotate(x, y);
-                    }
-                    else if (Input.touchCount == 2)
-                    {
-                        float pinchAmount = 0;
-                        Quaternion desiredRotation = transform.rotation;
-
-                        DetectTouch.Calculate();
-
-                        if (Mathf.Abs(DetectTouch.pinchDistanceDelta) > 0)
+                        if (Input.GetTouch(0).phase == TouchPhase.Began)
                         {
-                            pinchAmount = DetectTouch.pinchDistanceDelta;
-
-                            if (DetectTouch.pinchDistanceDelta >= 0)
-                            {
-                                if (Vector3.Distance(transform.position, target) > minZoomValue)
-                                    distanceValue -= pinchAmount * sensivity;
-                            }
-                            else
-                            {
-                                if (Vector3.Distance(transform.position, target) < maxZoomValue)
-                                    distanceValue += Mathf.Abs(pinchAmount) * sensivity;
-                            }
-
-                            distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                            startPoint = Input.GetTouch(0).position;
+                            xTemp = x;
+                            yTemp = y;
                         }
 
-                        transform.position += transform.forward * pinchAmount * sensivity;
+                        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+                        {
+                            nextPoint = Input.GetTouch(0).position;
+
+                            x = xTemp + (nextPoint.x - startPoint.x) * 180.0f / Screen.width;
+                            y = yTemp - (nextPoint.y - startPoint.y) * 90.0f / Screen.height;
+
+                            rotate(x, y);
+                        }
+                        else if (Input.touchCount == 2)
+                        {
+                            float pinchAmount = 0;
+                            Quaternion desiredRotation = transform.rotation;
+
+                            DetectTouch.Calculate();
+
+                            if (Mathf.Abs(DetectTouch.pinchDistanceDelta) > 0)
+                            {
+                                pinchAmount = DetectTouch.pinchDistanceDelta;
+
+                                if (DetectTouch.pinchDistanceDelta >= 0)
+                                {
+                                    if (Vector3.Distance(transform.position, target) > minZoomValue)
+                                        distanceValue -= pinchAmount * sensivity;
+                                }
+                                else
+                                {
+                                    if (Vector3.Distance(transform.position, target) < maxZoomValue)
+                                        distanceValue += Mathf.Abs(pinchAmount) * sensivity;
+                                }
+
+                                distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                            }
+
+                            transform.position += transform.forward * pinchAmount * sensivity;
+                        }
                     }
                 }
             }
