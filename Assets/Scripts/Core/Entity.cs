@@ -49,7 +49,8 @@ namespace SolarSystem.Core
 
             //controller
             cameraController = solarView.GetComponent<Controller.OrbitController>();
-            cameraController.Target = SolarMathModel.container3D().getObject(Objects.Sun).getTransform().position;
+            //cameraController.Target = SolarMathModel.container3D().getObject(Objects.Sun).getTransform().position;
+            cameraController.DynamicTarget = SolarMathModel.container3D().getObject(Objects.Sun);
         }
 
         //every frame
