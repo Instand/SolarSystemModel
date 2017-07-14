@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using SolarSystem.Interfaces;
 
 namespace SolarSystem.Controller
 {
@@ -57,6 +58,7 @@ namespace SolarSystem.Controller
         private Vector3 startPoint;
         private Vector3 nextPoint;
         private Camera mainCamera;
+        private IVisualSolarObject dynamicTarget = null;
 
         //controller state
         private bool active = true;
@@ -74,8 +76,21 @@ namespace SolarSystem.Controller
             }
         }
 
+        //transform target
+        public IVisualSolarObject DynamicTarget
+        {
+            set
+            {
+                dynamicTarget = value;
+            }
+            get
+            {
+                return dynamicTarget;
+            }
+        }
+
         //distance property
-        private Vector3 Distance
+        public Vector3 Distance
         {
             set
             {
@@ -106,7 +121,7 @@ namespace SolarSystem.Controller
         }
 
         //activation
-        private bool Active
+        public bool Active
         {
             get
             {
@@ -122,6 +137,16 @@ namespace SolarSystem.Controller
         public void setZoomValue(float value)
         {
             zoomValue = value;
+        }
+
+        /// <summary>
+        /// Updates x and y
+        /// </summary>
+        public void updateXY()
+        {
+            Vector2 angles = transform.localEulerAngles;
+            x = angles.x;
+            y = angles.y;
         }
         
         //before first frame
@@ -147,6 +172,14 @@ namespace SolarSystem.Controller
         {
             if (active)
             {
+                if (dynamicTarget != null)
+                {
+                    transform.LookAt(dynamicTarget.getTransform(), Vector3.down);
+                    distanceValue = Vector3.Distance(dynamicTarget.getTransform().position, transform.position);
+                    distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                    rotate(x, y);
+                }
+
                 rotateControls();
                 zoom();
             }
@@ -230,6 +263,10 @@ namespace SolarSystem.Controller
         {
             //Transform angle in degree in quaternion form used by Unity for rotation.
             Quaternion rotation = Quaternion.Euler(y, x, 0.0f);
+
+            //update target if we need
+            if (dynamicTarget != null)
+                target = dynamicTarget.getTransform().position;
 
             //The new position is the target position + the distance vector of the camera
             //rotated at the specified angle.
