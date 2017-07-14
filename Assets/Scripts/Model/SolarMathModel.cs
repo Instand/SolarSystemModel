@@ -43,6 +43,9 @@ namespace SolarSystem.Model
         private const float saturnRingScale = 1.95f;
         private const float uranusRingScale = 1.75f;
 
+        //save
+        private static double savedDaysPerFrameScale = 0;
+
         //inner and outer radius
         private static double saturnRingInnerRadius = 0;
         private static double saturnRingOuterRadius = 0;
@@ -54,6 +57,15 @@ namespace SolarSystem.Model
 
         //solar view
         private static OrbitController cameraController = null;
+
+        //orbit controller
+        public static OrbitController CameraController
+        {
+            get
+            {
+                return cameraController;
+            }
+        }
 
         static SolarMathModel()
         {
@@ -82,7 +94,7 @@ namespace SolarSystem.Model
                 uranusRingInnerRadius = uranus.radius() + 2.0;
             }
 
-            cameraController = Camera.main.GetComponent<OrbitController>();
+            cameraController = Camera.main.gameObject.GetComponent<OrbitController>();
         }
 
         //get list of 3d objects
@@ -457,6 +469,35 @@ namespace SolarSystem.Model
         public static void setSolarSystemSpeed(float speed)
         {
             daysPerFrameScale = speed;
+        }
+
+        /// <summary>
+        /// Returns solar speed
+        /// </summary>
+        /// <returns></returns>
+        public static double solarSpeed()
+        {
+            return daysPerFrameScale;
+        }
+
+        /// <summary>
+        /// Stops math model
+        /// </summary>
+        public static void stopModel()
+        {
+            if (daysPerFrameScale != 0)
+                savedDaysPerFrameScale = daysPerFrameScale;
+
+            setSolarSystemSpeed(0);
+        }
+
+        /// <summary>
+        /// Resumes math model
+        /// </summary>
+        public static void resumeModel()
+        {
+            if (savedDaysPerFrameScale != 0)
+                setSolarSystemSpeed((float)savedDaysPerFrameScale);
         }
 
         /// <summary>
