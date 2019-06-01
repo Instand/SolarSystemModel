@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using SolarSystem.Core;
 using SolarSystem.MathObjects;
-using System;
 using SolarSystem.Controller;
 using SolarSystem.Objects3D;
 
 namespace SolarSystem.Model
 {
-    //represents base solar system model
+    /// <summary>
+    /// Represents base solar system model
+    /// </summary>
     public static class SolarMathModel
     {
         //time vars
@@ -356,57 +358,55 @@ namespace SolarSystem.Model
                     visualObj.getTransform().rotation = Quaternion.AngleAxis(-(float)solarObj.tilt(), Values.tiltAxis) * Quaternion.AngleAxis((float)solarObj.roll(), Values.rollAxis);
                 }
             }
-            else
+        }
+
+        /// <summary>
+        /// Calculates any data you need
+        /// </summary>
+        public static void additionalCalculations()
+        {
+            ringsCalculations();
+        }
+
+        /// <summary>
+        /// Calculates rings rotation/pos/scale
+        /// </summary>
+        private static void ringsCalculations()
+        {
+            //saturn ring 3d
+            var saturnRing = solarSystemObjects.getObject(Objects.SaturnRing);
+
+            //saturn
+            var saturn = saturnRing.buddy();
+
+            if (saturnRing != null && saturn != null)
             {
-                //rings calculation
-                switch (obj)
-                {
-                    case Objects.SaturnRing:
+                //calculate data
+                var scale = ((float)(saturnRingInnerRadius + saturnRingOuterRadius)) / saturnRingScale;
+                var roll = saturn.getTransform().rotation.y / 10.0f;
 
-                        //saturn ring 3d
-                        var saturnRing = solarSystemObjects.getObject(obj);
+                //set data
+                saturnRing.getTransform().position = saturn.getTransform().position;
+                saturnRing.getTransform().rotation = saturn.getTransform().rotation;
+                saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
+            }
 
-                        //saturn
-                        var saturn = saturnRing.buddy();
+            //uranus ring 3d
+            var uranusRing = solarSystemObjects.getObject(Objects.UranusRing);
 
-                        if (saturnRing != null && saturn != null)
-                        {
-                            //calculate data
-                            var scale = (float)(saturnRingInnerRadius + saturnRingOuterRadius) / saturnRingScale;
-                            var roll = saturn.getTransform().rotation.y / 10.0f;
+            //uranus
+            var uranus = uranusRing.buddy();
 
-                            //set data
-                            saturnRing.getTransform().position = saturn.getTransform().position;
-                            saturnRing.getTransform().rotation = saturn.getTransform().rotation;
-                            saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
-                        }
+            if (uranus != null && uranusRing != null)
+            {
+                //calculate data
+                var scale = ((float)(uranusRingInnerRadius + uranusRingOuterRadius)) / uranusRingScale;
+                var roll = uranus.getTransform().rotation.y / 10.0f;
 
-                        break;
-
-                    case Objects.UranusRing:
-
-                        //uranus ring 3d
-                        var uranusRing = solarSystemObjects.getObject(obj);
-
-                        //uranus
-                        var uranus = uranusRing.buddy();
-
-                        if (uranus != null && uranusRing != null)
-                        {
-                            //calculate data
-                            var scale = (float)(uranusRingInnerRadius + uranusRingOuterRadius) / uranusRingScale;
-                            var roll = uranus.getTransform().rotation.y / 10.0f;
-
-                            //set data
-                            uranusRing.getTransform().position = uranus.getTransform().position;
-                            uranusRing.getTransform().rotation = uranus.getTransform().rotation;
-                            uranusRing.getTransform().localScale = new Vector3(scale, scale, scale);
-                        }
-
-                        break;
-                    default:
-                        break;
-                }
+                //set data
+                uranusRing.getTransform().position = uranus.getTransform().position;
+                uranusRing.getTransform().rotation = uranus.getTransform().rotation;
+                uranusRing.getTransform().localScale = new Vector3(scale, scale, scale);
             }
         }
 
@@ -589,10 +589,7 @@ namespace SolarSystem.Model
 
                 //calculate need dist to camera
                 var limit = calculateZoomLimit(obj);
-                var needDist = dist - limit;
-
-                if (needDist <= 0)
-                    needDist = limit - dist;
+                var needDist = Math.Abs(dist - limit);
 
                 //get position
                 var onTargetLimit = onSolarObject.normalized * needDist;

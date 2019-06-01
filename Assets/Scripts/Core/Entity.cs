@@ -6,8 +6,10 @@ using SolarSystem.Model;
 
 namespace SolarSystem.Core
 {
-    //base entity of solar system
-    public class Entity : MonoBehaviour
+    /// <summary>
+    /// Base entity of solar system
+    /// </summary>
+    public sealed class Entity : MonoBehaviour
     {
         private Camera solarView = null;
         private Objects currentObject = Objects.SolarSystemView;
@@ -20,7 +22,9 @@ namespace SolarSystem.Core
         [SerializeField]
         private float lightIntensity = 1.6f;
 
-        //on create
+        /// <summary>
+        /// On creation
+        /// </summary>
         private void Awake()
         {
             //create light
@@ -49,11 +53,12 @@ namespace SolarSystem.Core
 
             //controller
             cameraController = solarView.GetComponent<Controller.OrbitController>();
-            //cameraController.Target = SolarMathModel.container3D().getObject(Objects.Sun).getTransform().position;
-            cameraController.DynamicTarget = SolarMathModel.container3D().getObject(Objects.Sun);
+            cameraController.Target = SolarMathModel.container3D().getObject(Objects.Sun);
         }
 
-        //every frame
+        /// <summary>
+        /// Every frame message
+        /// </summary>
         private void Update()
         {
             //set delta
@@ -62,10 +67,11 @@ namespace SolarSystem.Core
             //calculate time
             SolarMathModel.advanceTime(currentObject);
 
-            var count = (int)Objects.EarthCloud;
+            //calculate all planet positions
+            foreach (var planet in MathObjects.AbstractObjectsContainer.solarObjects())
+                SolarMathModel.calculateObjectPosition(planet.objectType());
 
-            for (int i = 0; i < count; ++i)
-                SolarMathModel.calculateObjectPosition((Objects)i);
+            SolarMathModel.additionalCalculations();
         }
     }
 }

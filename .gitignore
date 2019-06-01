@@ -77,3 +77,7 @@ sysinfo.txt
 /ProjectSettings/QualitySettings.asset
 /ProjectSettings/TagManager.asset
 /ProjectSettings/TimeManager.asset
+/Assets/Scripts/Camera/DetectTouch.cs.meta
+/Assets/Scripts/Camera/CameraTouchMove.cs.meta
+/Assets/Scripts/Camera/CameraTouchMove.cs
+/Assets/Skybox

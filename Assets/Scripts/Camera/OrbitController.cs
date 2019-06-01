@@ -6,23 +6,37 @@ using SolarSystem.Interfaces;
 
 namespace SolarSystem.Controller
 {
-    //camera controller
-    public class OrbitController : MonoBehaviour
+    /// <summary>
+    /// Camera controller
+    /// </summary>
+    public sealed class OrbitController : MonoBehaviour
     {
-        //The target of the camera. The camera will always point to this object.
-        private Vector3 target;
+        /// <summary>
+        /// The target of the camera. The camera will always point to this object.
+        /// </summary>
+        private IVisualSolarObject target;
 
-        //The default distance of the camera from the target.
+        /// <summary>
+        /// The default distance of the camera from the target.
+        /// </summary>
         [SerializeField]
         private float distanceValue = Core.Values.solarDistance;
 
-        //Control the speed of zooming and dezooming.
+        /// <summary>
+        /// Control the speed of zooming and dezooming.
+        /// </summary>
         [SerializeField]
         private float zoomValue = 35000.0f;
 
+        /// <summary>
+        /// Min zoom value
+        /// </summary>
         [SerializeField]
         private float minZoomValue = 70000.0f;
 
+        /// <summary>
+        /// Max zoom value
+        /// </summary>
         [SerializeField]
         private float maxZoomValue = Core.Values.solarDistance;
 
@@ -58,13 +72,16 @@ namespace SolarSystem.Controller
         private Vector3 startPoint;
         private Vector3 nextPoint;
         private Camera mainCamera;
-        private IVisualSolarObject dynamicTarget = null;
 
-        //controller state
+        /// <summary>
+        /// Controller state
+        /// </summary>
         private bool active = true;
 
-        //target property
-        public Vector3 Target
+        /// <summary>
+        /// Main target object
+        /// </summary>
+        public IVisualSolarObject Target
         {
             set
             {
@@ -76,20 +93,9 @@ namespace SolarSystem.Controller
             }
         }
 
-        //transform target
-        public IVisualSolarObject DynamicTarget
-        {
-            set
-            {
-                dynamicTarget = value;
-            }
-            get
-            {
-                return dynamicTarget;
-            }
-        }
-
-        //distance property
+        /// <summary>
+        /// Distance property
+        /// </summary>
         public Vector3 Distance
         {
             set
@@ -102,7 +108,9 @@ namespace SolarSystem.Controller
             }
         }
 
-        //default zoom limit
+        /// <summary>
+        /// Default zoom limit
+        /// </summary>
         public float DefaultZoomLimit
         {
             get
@@ -111,7 +119,9 @@ namespace SolarSystem.Controller
             }
         }
 
-        //camera
+        /// <summary>
+        /// Main camera reference
+        /// </summary>
         public Camera Camera
         {
             get
@@ -120,7 +130,9 @@ namespace SolarSystem.Controller
             }
         }
 
-        //activation
+        /// <summary>
+        /// Activation
+        /// </summary>
         public bool Active
         {
             get
@@ -142,11 +154,18 @@ namespace SolarSystem.Controller
         /// <summary>
         /// Updates x and y
         /// </summary>
-        public void updateXY()
+        public void updateCamera()
         {
+            transform.LookAt(target.getTransform());
+
+            distanceValue = (target.getTransform().position - transform.position).magnitude;
+            distance = new Vector3(0.0f, 0.0f, -distanceValue);
+
             Vector2 angles = transform.localEulerAngles;
             x = angles.x;
             y = angles.y;
+
+            rotate(x, y);
         }
         
         //before first frame
@@ -167,21 +186,22 @@ namespace SolarSystem.Controller
             rotate(x, y);
         }
 
-        //after every frame
+        /// <summary>
+        /// After every frame
+        /// </summary>
         private void LateUpdate()
         {
             if (active)
             {
-                if (dynamicTarget != null)
+                if (target != null)
                 {
-                    transform.LookAt(dynamicTarget.getTransform(), Vector3.down);
-                    distanceValue = Vector3.Distance(dynamicTarget.getTransform().position, transform.position);
-                    distance = new Vector3(0.0f, 0.0f, -distanceValue);
-                    rotate(x, y);
-                }
+                    //distanceValue = (target.getTransform().position - transform.position).magnitude;
+                    //distance = new Vector3(0.0f, 0.0f, -distanceValue);
+                    //rotate(x, y);
 
-                rotateControls();
-                zoom();
+                    rotateControls();
+                    zoom();
+                }
             }
         }
 
@@ -236,12 +256,12 @@ namespace SolarSystem.Controller
 
                                 if (DetectTouch.pinchDistanceDelta >= 0)
                                 {
-                                    if (Vector3.Distance(transform.position, target) > minZoomValue)
+                                    if (Vector3.Distance(transform.position, target.getTransform().position) > minZoomValue)
                                         distanceValue -= pinchAmount * sensivity;
                                 }
                                 else
                                 {
-                                    if (Vector3.Distance(transform.position, target) < maxZoomValue)
+                                    if (Vector3.Distance(transform.position, target.getTransform().position) < maxZoomValue)
                                         distanceValue += Mathf.Abs(pinchAmount) * sensivity;
                                 }
 
@@ -262,15 +282,11 @@ namespace SolarSystem.Controller
         private void rotate(float x, float y)
         {
             //Transform angle in degree in quaternion form used by Unity for rotation.
-            Quaternion rotation = Quaternion.Euler(y, x, 0.0f);
-
-            //update target if we need
-            if (dynamicTarget != null)
-                target = dynamicTarget.getTransform().position;
+            Quaternion rotation = Quaternion.Euler(y, x, 0);
 
             //The new position is the target position + the distance vector of the camera
             //rotated at the specified angle.
-            Vector3 position = rotation * distance + target;
+            Vector3 position = rotation * distance + target.getTransform().position;
 
             //Update the rotation and position of the camera.
             transform.rotation = rotation;

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using SolarSystem.Core;
-using SolarSystem.MathObjects;
 
 namespace SolarSystem.MathObjects
 {
     using SolarMathObjects = List<AbstractObject>;
-    
-    //stores all math objects
+
+    /// <summary>
+    /// Stores all math objects
+    /// </summary>
     public static class AbstractObjectsContainer
     {
         //main storage field
@@ -15,7 +16,7 @@ namespace SolarSystem.MathObjects
 
         static AbstractObjectsContainer()
         {
-            container = new List<AbstractObject>();
+            container = new SolarMathObjects();
 
             //create and add math objects
             container.Add(MathObjectsFactory.create<Stars.Sun>());

@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace SolarSystem.Core
 {
-    //simple representation of math solar object
+    /// <summary>
+    /// Simple representation of math solar object
+    /// </summary>
     public abstract class AbstractObject
     {
         //main data
