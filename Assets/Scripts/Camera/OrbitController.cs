@@ -146,7 +146,7 @@ namespace SolarSystem.Controller
         }
 
         //set zoom value
-        public void setZoomValue(float value)
+        public void SetZoomValue(float value)
         {
             zoomValue = value;
         }
@@ -154,18 +154,18 @@ namespace SolarSystem.Controller
         /// <summary>
         /// Updates x and y
         /// </summary>
-        public void updateCamera()
+        public void UpdateCamera()
         {
-            transform.LookAt(target.getTransform());
+            transform.LookAt(target.GetTransform());
 
-            distanceValue = (target.getTransform().position - transform.position).magnitude;
+            distanceValue = (target.GetTransform().position - transform.position).magnitude;
             distance = new Vector3(0.0f, 0.0f, -distanceValue);
 
             Vector2 angles = transform.localEulerAngles;
             x = angles.x;
             y = angles.y;
 
-            rotate(x, y);
+            Rotate(x, y);
         }
         
         //before first frame
@@ -183,7 +183,7 @@ namespace SolarSystem.Controller
             x = angles.x;
             y = angles.y;
 
-            rotate(x, y);
+            Rotate(x, y);
         }
 
         /// <summary>
@@ -199,8 +199,8 @@ namespace SolarSystem.Controller
                     //distance = new Vector3(0.0f, 0.0f, -distanceValue);
                     //rotate(x, y);
 
-                    rotateControls();
-                    zoom();
+                    RotateControls();
+                    Zoom();
                 }
             }
         }
@@ -209,7 +209,7 @@ namespace SolarSystem.Controller
          * Rotate the camera when the first button of the mouse is pressed.
          * 
          */
-        private void rotateControls()
+        private void RotateControls()
         {
             if (!isMobile)
             {
@@ -218,7 +218,7 @@ namespace SolarSystem.Controller
                     x += Input.GetAxis(mouseX) * lookSpeedValue;
                     y += Input.GetAxis(mouseY) * lookSpeedValue;
 
-                    rotate(x, y);
+                    Rotate(x, y);
                 }
             }
             else
@@ -241,7 +241,7 @@ namespace SolarSystem.Controller
                             x = xTemp + (nextPoint.x - startPoint.x) * 180.0f / Screen.width;
                             y = yTemp - (nextPoint.y - startPoint.y) * 90.0f / Screen.height;
 
-                            rotate(x, y);
+                            Rotate(x, y);
                         }
                         else if (Input.touchCount == 2)
                         {
@@ -256,12 +256,12 @@ namespace SolarSystem.Controller
 
                                 if (DetectTouch.pinchDistanceDelta >= 0)
                                 {
-                                    if (Vector3.Distance(transform.position, target.getTransform().position) > minZoomValue)
+                                    if (Vector3.Distance(transform.position, target.GetTransform().position) > minZoomValue)
                                         distanceValue -= pinchAmount * sensivity;
                                 }
                                 else
                                 {
-                                    if (Vector3.Distance(transform.position, target.getTransform().position) < maxZoomValue)
+                                    if (Vector3.Distance(transform.position, target.GetTransform().position) < maxZoomValue)
                                         distanceValue += Mathf.Abs(pinchAmount) * sensivity;
                                 }
 
@@ -279,14 +279,14 @@ namespace SolarSystem.Controller
          * Transform the cursor mouvement in rotation and in a new position
          * for the camera.
          */
-        private void rotate(float x, float y)
+        private void Rotate(float x, float y)
         {
             //Transform angle in degree in quaternion form used by Unity for rotation.
             Quaternion rotation = Quaternion.Euler(y, x, 0);
 
             //The new position is the target position + the distance vector of the camera
             //rotated at the specified angle.
-            Vector3 position = rotation * distance + target.getTransform().position;
+            Vector3 position = rotation * distance + target.GetTransform().position;
 
             //Update the rotation and position of the camera.
             transform.rotation = rotation;
@@ -296,14 +296,14 @@ namespace SolarSystem.Controller
         /**
          * Zoom or dezoom depending on the input of the mouse wheel.
          */
-        private void zoom()
+        private void Zoom()
         {
             if (!isMobile)
             {
                 if (Input.GetAxis(mouseWheel) < 0.0f)
-                    zoomOut();
+                    ZoomOut();
                 else if (Input.GetAxis(mouseWheel) > 0.0f)
-                    zoomIn();
+                    ZoomIn();
             }
         }
 
@@ -311,13 +311,13 @@ namespace SolarSystem.Controller
          * Reduce the distance from the camera to the target and
          * update the position of the camera (with the Rotate function).
          */
-        private void zoomIn()
+        private void ZoomIn()
         {
             if ((distanceValue - zoomValue) > minZoomValue)
             {
                 distanceValue -= zoomValue;
                 distance = new Vector3(0.0f, 0.0f, -distanceValue);
-                rotate(x, y);
+                Rotate(x, y);
             }
         }
 
@@ -325,13 +325,13 @@ namespace SolarSystem.Controller
          * Increase the distance from the camera to the target and
          * update the position of the camera (with the Rotate function).
          */
-        private void zoomOut()
+        private void ZoomOut()
         {
             if ((distanceValue + zoomValue) < maxZoomValue)
             {
                 distanceValue += zoomValue;
                 distance = new Vector3(0.0f, 0.0f, -distanceValue);
-                rotate(x, y);
+                Rotate(x, y);
             }
         }
     }

@@ -11,42 +11,42 @@ namespace SolarSystem.Interfaces
         /// Sets core object type
         /// </summary>
         /// <param name="objectType"></param>
-        void setSolarType(Core.Objects objectType);
+        void SetSolarType(Core.Objects objectType);
 
         /// <summary>
         /// Returns solar object typeS
         /// </summary>
         /// <returns></returns>
-        Core.Objects objectType();
+        Core.Objects ObjectType();
 
         /// <summary>
         /// Sets buddy for another solar object
         /// </summary>
         /// <param name="buddy"></param>
-        void setBuddy(IVisualSolarObject buddy);
+        void SetBuddy(IVisualSolarObject buddy);
 
         /// <summary>
         /// Returns object's buddy object
         /// </summary>
         /// <returns></returns>
-        IVisualSolarObject buddy();
+        IVisualSolarObject Buddy();
 
         /// <summary>
         /// Returns gameobject of object
         /// </summary>
         /// <returns></returns>
-        GameObject getGameObject();
+        GameObject GetGameObject();
 
         /// <summary>
         /// Returns object transform
         /// </summary>
         /// <returns></returns>
-        Transform getTransform();
+        Transform GetTransform();
 
         /// <summary>
         /// Returns renderer
         /// </summary>
         /// <returns></returns>
-        MeshRenderer getRenderer();
+        MeshRenderer GetRenderer();
     }
 }

@@ -18,18 +18,18 @@ namespace SolarSystem.MathObjects
         {
             container = new SolarMathObjects();
 
-            //create and add math objects
-            container.Add(MathObjectsFactory.create<Stars.Sun>());
-            container.Add(MathObjectsFactory.create<Planets.Mercury>());
-            container.Add(MathObjectsFactory.create<Planets.Venus>());
-            container.Add(MathObjectsFactory.create<Planets.Earth>());
-            container.Add(MathObjectsFactory.create<Planets.Mars>());
-            container.Add(MathObjectsFactory.create<Planets.Jupiter>());
-            container.Add(MathObjectsFactory.create<Planets.Saturn>());
-            container.Add(MathObjectsFactory.create<Planets.Uranus>());
-            container.Add(MathObjectsFactory.create<Planets.Neptune>());
-            container.Add(MathObjectsFactory.create<DwarfPlanets.Pluto>());
-            container.Add(MathObjectsFactory.create<Moons.Moon>());
+            //Create and add math objects
+            container.Add(MathObjectsFactory.Create<Stars.Sun>());
+            container.Add(MathObjectsFactory.Create<Planets.Mercury>());
+            container.Add(MathObjectsFactory.Create<Planets.Venus>());
+            container.Add(MathObjectsFactory.Create<Planets.Earth>());
+            container.Add(MathObjectsFactory.Create<Planets.Mars>());
+            container.Add(MathObjectsFactory.Create<Planets.Jupiter>());
+            container.Add(MathObjectsFactory.Create<Planets.Saturn>());
+            container.Add(MathObjectsFactory.Create<Planets.Uranus>());
+            container.Add(MathObjectsFactory.Create<Planets.Neptune>());
+            container.Add(MathObjectsFactory.Create<DwarfPlanets.Pluto>());
+            container.Add(MathObjectsFactory.Create<Moons.Moon>());
         }
 
         /// <summary>
@@ -37,14 +37,14 @@ namespace SolarSystem.MathObjects
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static AbstractObject solarObject(Objects obj)
+        public static AbstractObject SolarObject(Objects obj)
         {
             AbstractObject searchedObject = null;
 
             searchedObject = container.Find(
                 delegate(AbstractObject o)
                 {
-                    return o.objectType() == obj;
+                    return o.ObjectType() == obj;
                 });
 
             return searchedObject;
@@ -54,7 +54,7 @@ namespace SolarSystem.MathObjects
         /// Returns all abstract math objects
         /// </summary>
         /// <returns></returns>
-        public static SolarMathObjects solarObjects()
+        public static SolarMathObjects SolarObjects()
         {
             return container;
         }

@@ -15,82 +15,82 @@ namespace SolarSystem.Objects3D
         {
             visualObjects = new List<IVisualSolarObject>();
 
-            var count = (int)Objects.SaturnRing;
+            var count = (int)Core.Objects.SaturnRing;
 
-            //create sun
-            var sun = SolarBuilder.createSun();
+            //Create sun
+            var sun = SolarBuilder.CreateSun();
             var sunObj = sun.GetComponent<IVisualSolarObject>();
 
             if (sunObj != null)
             {
-                sunObj.setSolarType(Objects.Sun);
-                sun.name = Objects.Sun.ToString();
+                sunObj.SetSolarType(Core.Objects.Sun);
+                sun.name = Core.Objects.Sun.ToString();
 
                 //renderer
-                sunObj.getRenderer().material.mainTexture = Resources.Load<Texture2D>("Textures/sunmap");
+                sunObj.GetRenderer().material.mainTexture = Resources.Load<Texture2D>("Textures/sunmap");
 
                 //add sun to container
                 visualObjects.Add(sunObj);
             }
 
-            //create objects from enum
+            //Create objects from enum
             for (int i = 1; i < count; ++i)
             {
                 Objects obj = (Objects)i;
 
-                //create planets
-                var planet = SolarBuilder.createPlanet();
+                //Create planets
+                var planet = SolarBuilder.CreatePlanet();
                 var visualObj = planet.GetComponent<IVisualSolarObject>();
 
                 if (visualObj != null)
                 {
-                    visualObj.setSolarType(obj);
+                    visualObj.SetSolarType(obj);
                     planet.name = obj.ToString();
 
                     //config renderer
-                    rendererTexture(visualObj);
+                    RendererTexture(visualObj);
 
                     //add planet to container
                     visualObjects.Add(visualObj);
                 }
             }
 
-            //create saturn ring
-            var saturnRing = SolarBuilder.createRing();
+            //Create saturn ring
+            var saturnRing = SolarBuilder.CreateRing();
             var saturnRingInterface = saturnRing.GetComponent<IVisualSolarObject>();
 
             if (saturnRingInterface != null)
             {
-                saturnRingInterface.setSolarType(Objects.SaturnRing);
-                saturnRing.name = Objects.SaturnRing.ToString();
+                saturnRingInterface.SetSolarType(Core.Objects.SaturnRing);
+                saturnRing.name = Core.Objects.SaturnRing.ToString();
 
                 //buddy
-                var saturn = getObject(Objects.Saturn);
+                var saturn = GetObject(Core.Objects.Saturn);
 
                 if (saturn != null)
-                    saturnRingInterface.setBuddy(saturn);
+                    saturnRingInterface.SetBuddy(saturn);
 
                 //config renderer + add object
-                rendererTexture(saturnRingInterface);
+                RendererTexture(saturnRingInterface);
                 visualObjects.Add(saturnRingInterface);
             }
 
-            //create uranus ring
-            var uranusRing = SolarBuilder.createRing();
+            //Create uranus ring
+            var uranusRing = SolarBuilder.CreateRing();
             var uranusRingInterface = uranusRing.GetComponent<IVisualSolarObject>();
 
             if (uranusRingInterface != null)
             {
-                uranusRingInterface.setSolarType(Objects.UranusRing);
-                uranusRing.name = Objects.UranusRing.ToString();
+                uranusRingInterface.SetSolarType(Core.Objects.UranusRing);
+                uranusRing.name = Core.Objects.UranusRing.ToString();
 
                 //buddy
-                var uranus = getObject(Objects.Uranus);
+                var uranus = GetObject(Core.Objects.Uranus);
 
                 if (uranus != null)
-                    uranusRingInterface.setBuddy(uranus);
+                    uranusRingInterface.SetBuddy(uranus);
 
-                rendererTexture(uranusRingInterface);
+                RendererTexture(uranusRingInterface);
                 visualObjects.Add(uranusRingInterface);
             }
         }
@@ -99,7 +99,7 @@ namespace SolarSystem.Objects3D
         /// Returns all 3d objectd
         /// </summary>
         /// <returns></returns>
-        public List<IVisualSolarObject> objects()
+        public List<IVisualSolarObject> Objects()
         {
             return visualObjects;
         }
@@ -109,12 +109,12 @@ namespace SolarSystem.Objects3D
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public IVisualSolarObject getObject(Objects obj)
+        public IVisualSolarObject GetObject(Objects obj)
         {
             IVisualSolarObject searchedObject = null;
 
             searchedObject = visualObjects.Find(delegate (IVisualSolarObject visualObject) {
-                return visualObject.objectType() == obj;
+                return visualObject.ObjectType() == obj;
             });
 
             return searchedObject;
@@ -124,57 +124,57 @@ namespace SolarSystem.Objects3D
         /// Sets texture for each planet
         /// </summary>
         /// <param name="obj"></param>
-        private void rendererTexture(IVisualSolarObject obj)
+        private void RendererTexture(IVisualSolarObject obj)
         {
-            var renderer = obj.getRenderer();
+            var renderer = obj.GetRenderer();
 
-            switch(obj.objectType())
+            switch(obj.ObjectType())
             {
-                case Objects.Earth:
+                case Core.Objects.Earth:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/earthmap");
                     break;
 
-                case Objects.Mercury:
+                case Core.Objects.Mercury:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/mercurymap");
                     break;
 
-                case Objects.Venus:
+                case Core.Objects.Venus:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/venusmap");
                     break;
 
-                case Objects.Mars:
+                case Core.Objects.Mars:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/marsmap");
                     break;
 
-                case Objects.Jupiter:
+                case Core.Objects.Jupiter:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/jupitermap");
                     break;
 
-                case Objects.Saturn:
+                case Core.Objects.Saturn:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/saturnmap");
                     break;
 
-                case Objects.Uranus:
+                case Core.Objects.Uranus:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/uranusmap");
                     break;
 
-                case Objects.Neptune:
+                case Core.Objects.Neptune:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/neptunemap");
                     break;
 
-                case Objects.Pluto:
+                case Core.Objects.Pluto:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/plutomap");
                     break;
 
-                case Objects.Moon:
+                case Core.Objects.Moon:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/moonmap");
                     break;
 
-                case Objects.SaturnRing:
+                case Core.Objects.SaturnRing:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/saturnring");
                     break;
 
-                case Objects.UranusRing:
+                case Core.Objects.UranusRing:
                     renderer.material.mainTexture = Resources.Load<Texture2D>("Textures/uranusring");
                     break;
 

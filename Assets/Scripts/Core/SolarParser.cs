@@ -12,7 +12,7 @@ namespace SolarSystem.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static float parseSolarObjectsRadius(Objects obj)
+        public static float ParseSolarObjectsRadius(Objects obj)
         {
             float radius = 0;
 

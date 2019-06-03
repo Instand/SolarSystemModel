@@ -10,68 +10,68 @@ namespace SolarSystem.Core
     public abstract class AbstractObject
     {
         //main data
-        protected double _radius = 0;
-        protected double _tilt = 0;
-        protected double _N1 = 0;
-        protected double _N2 = 0;
-        protected double _i1 = 0;
-        protected double _i2 = 0;
-        protected double _w1 = 0;
-        protected double _w2 = 0;
-        protected double _a1 = 0;
-        protected double _a2 = 0;
-        protected double _e1 = 0;
-        protected double _e2 = 0;
-        protected double _M1 = 0;
-        protected double _M2 = 0;
-        protected double _period = 0;
-        protected double _x = 0;
-        protected double _y = 0;
-        protected double _z = 0;
-        protected double _roll = 0;
-        protected Objects _centerOfOrbit;
-        protected Objects _objectType;
+        protected double radius = 0;
+        protected double tilt = 0;
+        protected double n1 = 0;
+        protected double n2 = 0;
+        protected double i1 = 0;
+        protected double i2 = 0;
+        protected double w1 = 0;
+        protected double w2 = 0;
+        protected double a1 = 0;
+        protected double a2 = 0;
+        protected double e1 = 0;
+        protected double e2 = 0;
+        protected double m1 = 0;
+        protected double m2 = 0;
+        protected double period = 0;
+        protected double x = 0;
+        protected double y = 0;
+        protected double z = 0;
+        protected double roll = 0;
+        protected Objects centerOfOrbit;
+        protected Objects objectType;
 
         //protected in constructor
-        protected abstract void initialize();
+        protected abstract void Initialize();
 
         public AbstractObject()
         {
-            initialize();
+            Initialize();
         }
 
         /// <summary>
         /// returns radius
         /// </summary>
         /// <returns></returns>
-        public double radius()
+        public double Radius()
         {
-            return _radius;
+            return radius;
         }
 
         /// <summary>
         /// sets radius
         /// </summary>
         /// <param name="radius"></param>
-        public void setRadius(double radius)
+        public void SetRadius(double radius)
         {
-            _radius = radius;
+            this.radius = radius;
         }
 
         /// <summary>
         /// returns tilt
         /// </summary>
         /// <returns></returns>
-        public double tilt()
+        public double Tilt()
         {
-            return _tilt;
+            return tilt;
         }
 
         /// <summary>
         /// sets tilt
         /// </summary>
         /// <param name="tilt"></param>
-        public void setTilt(double tilt)
+        public void SetTilt(double tilt)
         {
 
         }
@@ -80,72 +80,72 @@ namespace SolarSystem.Core
         /// returns roll
         /// </summary>
         /// <returns></returns>
-        public double roll()
+        public double Roll()
         {
-            return _roll;
+            return roll;
         }
 
         /// <summary>
         /// sets roll
         /// </summary>
         /// <param name="roll"></param>
-        public void setRoll(double roll)
+        public void SetRoll(double roll)
         {
-            _roll = roll;
+            this.roll = roll;
         }
 
         /// <summary>
         /// returns x cord
         /// </summary>
         /// <returns></returns>
-        public double x()
+        public double X()
         {
-            return _x;
+            return x;
         }
 
         /// <summary>
         /// sets x cord
         /// </summary>
         /// <param name="x"></param>
-        public void setX(double x)
+        public void SetX(double x)
         {
-            _x = x;
+            this.x = x;
         }
 
         /// <summary>
         /// returns y cord
         /// </summary>
         /// <returns></returns>
-        public double y()
+        public double Y()
         {
-            return _y;
+            return y;
         }
 
         /// <summary>
         /// sets y cord
         /// </summary>
         /// <param name="y"></param>
-        public void setY(double y)
+        public void SetY(double y)
         {
-            _y = y;
+            this.y = y;
         }
 
         /// <summary>
         /// returns z cord
         /// </summary>
         /// <returns></returns>
-        public double z()
+        public double Z()
         {
-            return _z;
+            return z;
         }
 
         /// <summary>
         /// sets z cord
         /// </summary>
         /// <param name="z"></param>
-        public void setZ(double z)
+        public void SetZ(double z)
         {
-            _z = z;
+            this.z = z;
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace SolarSystem.Core
         /// <returns></returns>
         public double N1()
         {
-            return _N1;
+            return n1;
         }
 
         /// <summary>
@@ -163,79 +163,79 @@ namespace SolarSystem.Core
         /// <returns></returns>
         public double N2()
         {
-            return _N2;
+            return n2;
         }
 
         /// <summary>
         /// returns i1 atribute
         /// </summary>
         /// <returns></returns>
-        public double i1()
+        public double I1()
         {
-            return _i1;
+            return i1;
         }
 
         /// <summary>
         /// returns i2 atribute
         /// </summary>
         /// <returns></returns>
-        public double i2()
+        public double I2()
         {
-            return _i2;
+            return i2;
         }
 
         /// <summary>
         /// returns w1 atribute
         /// </summary>
         /// <returns></returns>
-        public double w1()
+        public double W1()
         {
-            return _w1;
+            return w1;
         }
 
         /// <summary>
         /// return w2 atribute
         /// </summary>
         /// <returns></returns>
-        public double w2()
+        public double W2()
         {
-            return _w2;
+            return w2;
         }
 
         /// <summary>
         /// returns a1 atribute
         /// </summary>
         /// <returns></returns>
-        public double a1()
+        public double A1()
         {
-            return _a1;
+            return a1;
         }
 
         /// <summary>
         /// returns a2 atribute
         /// </summary>
         /// <returns></returns>
-        public double a2()
+        public double A2()
         {
-            return _a2;
+            return a2;
         }
 
         /// <summary>
         /// returns e1 atribute
         /// </summary>
         /// <returns></returns>
-        public double e1()
+        public double E1()
         {
-            return _e1;
+            return e1;
         }
 
         /// <summary>
         /// returns e2 atribute
         /// </summary>
         /// <returns></returns>
-        public double e2()
+        public double E2()
         {
-            return _e2;
+            return e2;
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace SolarSystem.Core
         /// <returns></returns>
         public double M1()
         {
-            return _M1;
+            return m1;
         }
 
         /// <summary>
@@ -253,33 +253,33 @@ namespace SolarSystem.Core
         /// <returns></returns>
         public double M2()
         {
-            return _M2;
+            return m2;
         }
 
         /// <summary>
         /// returns object period
         /// </summary>
         /// <returns></returns>
-        public double period()
+        public double Period()
         {
-            return _period;
+            return period;
         }
 
         /// <summary>
         /// returns object orbit center
         /// </summary>
         /// <returns></returns>
-        public Objects centerOfOrbit()
+        public Objects CenterOfOrbit()
         {
-            return _centerOfOrbit;
+            return centerOfOrbit;
         }
 
         /// <summary>
         /// returns object type
         /// </summary>
-        public Objects objectType()
+        public Objects ObjectType()
         {
-            return _objectType;
+            return objectType;
         }
     }
 }

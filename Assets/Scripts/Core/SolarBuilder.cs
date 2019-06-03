@@ -12,12 +12,12 @@ namespace SolarSystem.Core
         /// Create simple planet 3D
         /// </summary>
         /// <returns></returns>
-        public static GameObject createPlanet()
+        public static GameObject CreatePlanet()
         {
             //new obj
             var planet = new GameObject();
 
-            createSphere(planet);
+            CreateSphere(planet);
 
             //add renderer
             var renderer = planet.AddComponent<MeshRenderer>();
@@ -36,21 +36,18 @@ namespace SolarSystem.Core
         /// Create solar system's sun
         /// </summary>
         /// <returns></returns>
-        public static GameObject createSun()
+        public static GameObject CreateSun()
         {
             //new obj
             var sun = new GameObject();
 
-            createSphere(sun);
+            CreateSphere(sun);
 
             //add renderer
             var renderer = sun.AddComponent<MeshRenderer>();
             renderer.material = Resources.Load<Material>("Materials/SunMaterial");
 
-            //add script
             sun.AddComponent<Object3D>();
-
-            //add collider
             sun.AddComponent<SphereCollider>();
 
             return sun;
@@ -60,15 +57,12 @@ namespace SolarSystem.Core
         /// Creates planets ring
         /// </summary>
         /// <returns></returns>
-        public static GameObject createRing()
+        public static GameObject CreateRing()
         {
             //new ring
             var ring = Object.Instantiate(Resources.Load<GameObject>("Prefabs/Ring")) as GameObject;
 
-            //add material
             ring.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/RingMaterial");
-
-            //add script
             ring.AddComponent<Object3D>();
 
             return ring;
@@ -79,9 +73,9 @@ namespace SolarSystem.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static void createSphere(GameObject obj)
+        private static void CreateSphere(GameObject obj)
         {
-            //add filter + create sphere mesh
+            //add filter + Create sphere mesh
             MeshFilter filter = obj.AddComponent<MeshFilter>();
             Mesh mesh = filter.mesh;
             mesh.Clear();

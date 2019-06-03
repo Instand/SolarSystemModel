@@ -29,7 +29,7 @@ namespace SolarSystem.Objects3D
         /// Returns object's buddy object
         /// </summary>
         /// <returns></returns>
-        public IVisualSolarObject buddy()
+        public IVisualSolarObject Buddy()
         {
             return buddyObject;
         }
@@ -38,7 +38,7 @@ namespace SolarSystem.Objects3D
         /// Returns object solar type
         /// </summary>
         /// <returns></returns>
-        public Objects objectType()
+        public Objects ObjectType()
         {
             return solarType;
         }
@@ -47,7 +47,7 @@ namespace SolarSystem.Objects3D
         /// Sets object buddy
         /// </summary>
         /// <param name="buddy"></param>
-        public void setBuddy(IVisualSolarObject buddy)
+        public void SetBuddy(IVisualSolarObject buddy)
         {
             buddyObject = buddy;
         }
@@ -56,7 +56,7 @@ namespace SolarSystem.Objects3D
         /// Sets object type
         /// </summary>
         /// <param name="objectType"></param>
-        public void setSolarType(Objects objectType)
+        public void SetSolarType(Objects objectType)
         {
             solarType = objectType;
         }
@@ -65,7 +65,7 @@ namespace SolarSystem.Objects3D
         /// Returns gameobject
         /// </summary>
         /// <returns></returns>
-        public GameObject getGameObject()
+        public GameObject GetGameObject()
         {
             return baseObject;
         }
@@ -74,7 +74,7 @@ namespace SolarSystem.Objects3D
         /// Returns transform
         /// </summary>
         /// <returns></returns>
-        public Transform getTransform()
+        public Transform GetTransform()
         {
             return baseTransform;
         }
@@ -83,7 +83,7 @@ namespace SolarSystem.Objects3D
         /// Returns renderer
         /// </summary>
         /// <returns></returns>
-        public MeshRenderer getRenderer()
+        public MeshRenderer GetRenderer()
         {
             return baseRenderer;
         }

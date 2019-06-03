@@ -27,8 +27,8 @@ namespace SolarSystem.Core
         /// </summary>
         private void Awake()
         {
-            //create light
-            var sun = SolarMathModel.container3D().getObject(Objects.Sun);
+            //Create light
+            var sun = SolarMathModel.Container3D().GetObject(Objects.Sun);
             sunLight = (sun as MonoBehaviour).gameObject.AddComponent<Light>();
 
             if (sunLight)
@@ -48,12 +48,12 @@ namespace SolarSystem.Core
             solarView.nearClipPlane = CameraSettings.nearPlane * 0.0001f;
 
             //default values
-            SolarMathModel.setSolarSystemSpeed(Values.startSpeed);
-            SolarMathModel.changeSolarSystemScale(Values.startSize);
+            SolarMathModel.SetSolarSystemSpeed(Values.startSpeed);
+            SolarMathModel.ChangeSolarSystemScale(Values.startSize);
 
             //controller
             cameraController = solarView.GetComponent<Controller.OrbitController>();
-            cameraController.Target = SolarMathModel.container3D().getObject(Objects.Sun);
+            cameraController.Target = SolarMathModel.Container3D().GetObject(Objects.Sun);
         }
 
         /// <summary>
@@ -62,16 +62,16 @@ namespace SolarSystem.Core
         private void Update()
         {
             //set delta
-            SolarMathModel.setDeltaTime(Time.deltaTime);
+            SolarMathModel.SetDeltaTime(Time.deltaTime);
 
             //calculate time
-            SolarMathModel.advanceTime(currentObject);
+            SolarMathModel.AdvanceTime(currentObject);
 
             //calculate all planet positions
-            foreach (var planet in MathObjects.AbstractObjectsContainer.solarObjects())
-                SolarMathModel.calculateObjectPosition(planet.objectType());
+            foreach (var planet in MathObjects.AbstractObjectsContainer.SolarObjects())
+                SolarMathModel.CalculateObjectPosition(planet.ObjectType());
 
-            SolarMathModel.additionalCalculations();
+            SolarMathModel.AdditionalCalculations();
         }
     }
 }

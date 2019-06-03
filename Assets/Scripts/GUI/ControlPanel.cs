@@ -43,17 +43,17 @@ namespace SolarSystem.GUI
         {
             showing = planetPanel.activeSelf;
 
-            //create planets buttons
-            var modelList = SolarMathModel.objects3D();
+            //Create planets buttons
+            var modelList = SolarMathModel.Container3D().Objects();
 
-            //go to all and create buttons
+            //go to all and Create buttons
             for (int i = 0; i < modelList.Count; ++i)
             {
                 var visualObject = modelList[i];
 
                 if (visualObject != null)
                 {
-                    var sprite = Resources.Load<Sprite>("Textures/" + visualObject.objectType().ToString());
+                    var sprite = Resources.Load<Sprite>("Textures/" + visualObject.ObjectType().ToString());
 
                     if (sprite)
                     {
@@ -74,10 +74,10 @@ namespace SolarSystem.GUI
 
                             if (planetText)
                             {
-                                planetText.text = visualObject.objectType().ToString();
+                                planetText.text = visualObject.ObjectType().ToString();
                                 prefab.name = planetText.text;
                                 prefab.GetComponent<PlanetButton>().SolarObject = visualObject;
-                                prefab.GetComponent<Button>().onClick.AddListener(onPlanetButtonClicked);
+                                prefab.GetComponent<Button>().onClick.AddListener(OnPlanetButtonClicked);
 
                                 if (!showPlanetText)
                                     planetText.enabled = false;
@@ -102,7 +102,7 @@ namespace SolarSystem.GUI
         /// <summary>
         /// Planet list button clicked
         /// </summary>
-        public void showPlanets()
+        public void ShowPlanets()
         {
             if (planetPanel)
             {
@@ -114,18 +114,18 @@ namespace SolarSystem.GUI
         /// <summary>
         /// Planet button pressed
         /// </summary>
-        public void onPlanetButtonClicked()
+        public void OnPlanetButtonClicked()
         {
             var planetButton = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<PlanetButton>();
 
             if (planetButton)
-                animator.lookAt(planetButton.SolarObject.objectType());
+                animator.LookAt(planetButton.SolarObject.ObjectType());
         }
 
         /// <summary>
         /// Info button pressed
         /// </summary>
-        public void onInfoButtonClicked()
+        public void OnInfoButtonClicked()
         {
             optionsPanel.SetActive(false);
             showOptions = false;
@@ -141,7 +141,7 @@ namespace SolarSystem.GUI
         /// <summary>
         /// Options button clicked
         /// </summary>
-        public void onOptionsClicked()
+        public void OnOptionsClicked()
         {
             infoPanel.SetActive(false);
             showInfo = false;

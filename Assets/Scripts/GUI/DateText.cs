@@ -25,7 +25,7 @@ namespace SolarSystem.GUI
         // Update is called once per frame
         private void Update()
         {
-            var date = SolarMathModel.date();
+            var date = SolarMathModel.Date();
             var str = new System.Text.StringBuilder();
 
             //up date
@@ -65,7 +65,7 @@ namespace SolarSystem.GUI
             str.Append(date.Year);
 
             //to text
-            showingText.text = str.ToString();            
+            showingText.text = str.ToString();
         }
     }
 }

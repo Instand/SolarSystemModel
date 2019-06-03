@@ -75,49 +75,43 @@ namespace SolarSystem.Model
 
             //calculating start time
             startD = 367 * year - 7.0f * (year + (month + 9.0f) / 12.0f) / 4.0f + 275.0f * month / 9.0f + day - 730530.0f;
-            startD += calculateUT(hours, minutes, seconds);
+            startD += CalculateUT(hours, minutes, seconds);
             oldTimeD = startD;
             currentTimeD = startD;
 
             //calcualting saturn and uranus rings
-            var saturn = AbstractObjectsContainer.solarObject(Objects.Saturn);
+            var saturn = AbstractObjectsContainer.SolarObject(Objects.Saturn);
 
             if (saturn != null)
             {
-                saturnRingOuterRadius = saturn.radius() + Values.saturnOuterRadius;
-                saturnRingInnerRadius = saturn.radius() + 6.630;
+                saturnRingOuterRadius = saturn.Radius() + Values.saturnOuterRadius;
+                saturnRingInnerRadius = saturn.Radius() + 6.630;
             }
 
-            var uranus = AbstractObjectsContainer.solarObject(Objects.Uranus);
+            var uranus = AbstractObjectsContainer.SolarObject(Objects.Uranus);
 
             if (uranus != null)
             {
-                uranusRingOuterRadius = uranus.radius() + Values.uranusOuterRadius;
-                uranusRingInnerRadius = uranus.radius() + 2.0;
+                uranusRingOuterRadius = uranus.Radius() + Values.uranusOuterRadius;
+                uranusRingInnerRadius = uranus.Radius() + 2.0;
             }
 
             cameraController = Camera.main.gameObject.GetComponent<OrbitController>();
         }
 
-        //get list of 3d objects
-        public static List<Interfaces.IVisualSolarObject> objects3D()
-        {
-            return solarSystemObjects.objects();
-        }
-
         //get container
-        public static SolarObjectsContainer container3D()
+        public static SolarObjectsContainer Container3D()
         {
             return solarSystemObjects;
         }
 
         //helpers
-        private static float calculateTimeScale(int year, int month, int day)
+        private static float CalculateTimeScale(int year, int month, int day)
         {
             return 367.0f * year - 7.0f * (year + (month + 9.0f) / 12.0f) / 4.0f + 275.0f * month / 9.0f + day - 730530.0f;
         }
 
-        private static float calculateUT(int h, int m, float s)
+        private static float CalculateUT(int h, int m, float s)
         {
             return (h + m / 60.0f + s / 3600.0f) / 24.0f;
         }
@@ -126,16 +120,16 @@ namespace SolarSystem.Model
         /// Next time calculation
         /// </summary>
         /// <param name="obj"></param>
-        public static void advanceTime(Objects obj)
+        public static void AdvanceTime(Objects obj)
         {
-            var solarObject = AbstractObjectsContainer.solarObject(obj);
+            var solarObject = AbstractObjectsContainer.SolarObject(obj);
 
             if (obj == Objects.SolarSystemView)
                 daysPerFrame = daysPerFrameScale;
             else if (obj == Objects.Mercury || obj == Objects.Venus)
-                daysPerFrame = daysPerFrameScale * solarObject.period() / 25000.0;
+                daysPerFrame = daysPerFrameScale * solarObject.Period() / 25000.0;
             else
-                daysPerFrame = daysPerFrameScale * solarObject.period() / 100.0;
+                daysPerFrame = daysPerFrameScale * solarObject.Period() / 100.0;
 
             //add solar time
             solarTime = solarTime.AddMilliseconds(deltaTime * 1000.0f * daysPerFrame * ultraSpeed);
@@ -152,8 +146,8 @@ namespace SolarSystem.Model
             oldTimeD = currentTimeD;
 
             //update currentTimeD
-            currentTimeD = calculateTimeScale(year, month, day);
-            currentTimeD += calculateUT(hours, minutes, seconds);
+            currentTimeD = CalculateTimeScale(year, month, day);
+            currentTimeD += CalculateUT(hours, minutes, seconds);
 
             //get deltaD
             deltaTimeD = currentTimeD - oldTimeD;
@@ -164,7 +158,7 @@ namespace SolarSystem.Model
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static float outerRadius(Objects obj)
+        public static float OuterRadius(Objects obj)
         {
             double outerRadius = Values.solarDistance;
 
@@ -226,7 +220,7 @@ namespace SolarSystem.Model
         /// </summary>
         /// <param name="scale"></param>
         /// <returns></returns>
-        public static float objectsScale(float scale, bool focused)
+        public static float ObjectsScale(float scale, bool focused)
         {
             // Save actual scale
             if (!focused)
@@ -246,7 +240,7 @@ namespace SolarSystem.Model
         /// </summary>
         /// <param name="scale"></param>
         /// <param name="focused"></param>
-        public static void changeObjectsScale(float scale, bool focused)
+        public static void ChangeObjectsScale(float scale, bool focused)
         {
             if (!focused)
                 actualScale = scale;
@@ -261,7 +255,7 @@ namespace SolarSystem.Model
         /// Checks math object scaling
         /// </summary>
         /// <param name="obj"></param>
-        public static void checkObjectScaling(Objects obj)
+        public static void CheckObjectScaling(Objects obj)
         {
             if (obj != Objects.SolarSystemView)
             {
@@ -269,7 +263,7 @@ namespace SolarSystem.Model
                 if (actualScale <= focusedMinimumScale)
                 {
                     planetScale = focusedMinimumScale;
-                    changeObjectsScale(focusedMinimumScale, true);
+                    ChangeObjectsScale(focusedMinimumScale, true);
                 }
 
                 focusedScaling = true;
@@ -278,7 +272,7 @@ namespace SolarSystem.Model
             {
                 // Restore normal scaling
                 focusedScaling = false;
-                changeObjectsScale((float)actualScale, false);
+                ChangeObjectsScale((float)actualScale, false);
             }
         }
 
@@ -286,10 +280,10 @@ namespace SolarSystem.Model
         /// Real time solar object position calculating
         /// </summary>
         /// <param name="obj"></param>
-        public static void calculateObjectPosition(Objects obj)
+        public static void CalculateObjectPosition(Objects obj)
         {
             //get planet
-            var solarObj = AbstractObjectsContainer.solarObject(obj);
+            var solarObj = AbstractObjectsContainer.SolarObject(obj);
 
             //object exists
             if (solarObj != null)
@@ -313,10 +307,10 @@ namespace SolarSystem.Model
 
                         // Calculate the planet orbital elements from the current time in days
                         var N = (solarObj.N1() + solarObj.N2() * currentTimeD) * Math.PI / 180;
-                        var iPlanet = (solarObj.i1() + solarObj.i2() * currentTimeD) * Math.PI / 180;
-                        var w = (solarObj.w1() + solarObj.w2() * currentTimeD) * Math.PI / 180;
-                        var a = solarObj.a1() + solarObj.a2() * currentTimeD;
-                        var e = solarObj.e1() + solarObj.e2() * currentTimeD;
+                        var iPlanet = (solarObj.I1() + solarObj.I2() * currentTimeD) * Math.PI / 180;
+                        var w = (solarObj.W1() + solarObj.W2() * currentTimeD) * Math.PI / 180;
+                        var a = solarObj.A1() + solarObj.A2() * currentTimeD;
+                        var e = solarObj.E1() + solarObj.E2() * currentTimeD;
                         var M = (solarObj.M1() + solarObj.M2() * currentTimeD) * Math.PI / 180;
                         var E = M + e * Math.Sin(M) * (1.0 + e * Math.Cos(M));
 
@@ -334,12 +328,12 @@ namespace SolarSystem.Model
                         var yh = r * (Math.Sin(w + v) * Math.Sin(iPlanet));
 
                         // Apply the position offset from the center of orbit to the bodies
-                        Objects centerOfOrbit = solarObj.centerOfOrbit();
-                        var centerObj = AbstractObjectsContainer.solarObject(centerOfOrbit);
+                        Objects centerOfOrbit = solarObj.CenterOfOrbit();
+                        var centerObj = AbstractObjectsContainer.SolarObject(centerOfOrbit);
 
-                        solarObj.setX(centerObj.x() + xh * Values.auScale);
-                        solarObj.setY(centerObj.y() + yh * Values.auScale);
-                        solarObj.setZ(centerObj.z() + zh * Values.auScale);
+                        solarObj.SetX(centerObj.X() + xh * Values.auScale);
+                        solarObj.SetY(centerObj.Y() + yh * Values.auScale);
+                        solarObj.SetZ(centerObj.Z() + zh * Values.auScale);
                         break;
 
                     default:
@@ -347,15 +341,15 @@ namespace SolarSystem.Model
                 }
 
                 //roll
-                solarObj.setRoll((solarObj.roll() + deltaTimeD / solarObj.period() * 360.0));
+                solarObj.SetRoll((solarObj.Roll() + deltaTimeD / solarObj.Period() * 360.0));
 
                 //recalculation to 3D objects
-                Interfaces.IVisualSolarObject visualObj = solarSystemObjects.getObject(obj);
+                Interfaces.IVisualSolarObject visualObj = solarSystemObjects.GetObject(obj);
 
                 if (visualObj != null)
                 {
-                    visualObj.getTransform().position = new Vector3((float)solarObj.x(), (float)solarObj.y(), (float)solarObj.z());
-                    visualObj.getTransform().rotation = Quaternion.AngleAxis(-(float)solarObj.tilt(), Values.tiltAxis) * Quaternion.AngleAxis((float)solarObj.roll(), Values.rollAxis);
+                    visualObj.GetTransform().position = new Vector3((float)solarObj.X(), (float)solarObj.Y(), (float)solarObj.Z());
+                    visualObj.GetTransform().rotation = Quaternion.AngleAxis(-(float)solarObj.Tilt(), Values.tiltAxis) * Quaternion.AngleAxis((float)solarObj.Roll(), Values.rollAxis);
                 }
             }
         }
@@ -363,50 +357,50 @@ namespace SolarSystem.Model
         /// <summary>
         /// Calculates any data you need
         /// </summary>
-        public static void additionalCalculations()
+        public static void AdditionalCalculations()
         {
-            ringsCalculations();
+            RingsCalculations();
         }
 
         /// <summary>
         /// Calculates rings rotation/pos/scale
         /// </summary>
-        private static void ringsCalculations()
+        private static void RingsCalculations()
         {
             //saturn ring 3d
-            var saturnRing = solarSystemObjects.getObject(Objects.SaturnRing);
+            var saturnRing = solarSystemObjects.GetObject(Objects.SaturnRing);
 
             //saturn
-            var saturn = saturnRing.buddy();
+            var saturn = saturnRing.Buddy();
 
             if (saturnRing != null && saturn != null)
             {
                 //calculate data
                 var scale = ((float)(saturnRingInnerRadius + saturnRingOuterRadius)) / saturnRingScale;
-                var roll = saturn.getTransform().rotation.y / 10.0f;
+                var roll = saturn.GetTransform().rotation.y / 10.0f;
 
                 //set data
-                saturnRing.getTransform().position = saturn.getTransform().position;
-                saturnRing.getTransform().rotation = saturn.getTransform().rotation;
-                saturnRing.getTransform().localScale = new Vector3(scale, scale, scale);
+                saturnRing.GetTransform().position = saturn.GetTransform().position;
+                saturnRing.GetTransform().rotation = saturn.GetTransform().rotation;
+                saturnRing.GetTransform().localScale = new Vector3(scale, scale, scale);
             }
 
             //uranus ring 3d
-            var uranusRing = solarSystemObjects.getObject(Objects.UranusRing);
+            var uranusRing = solarSystemObjects.GetObject(Objects.UranusRing);
 
             //uranus
-            var uranus = uranusRing.buddy();
+            var uranus = uranusRing.Buddy();
 
             if (uranus != null && uranusRing != null)
             {
                 //calculate data
                 var scale = ((float)(uranusRingInnerRadius + uranusRingOuterRadius)) / uranusRingScale;
-                var roll = uranus.getTransform().rotation.y / 10.0f;
+                var roll = uranus.GetTransform().rotation.y / 10.0f;
 
                 //set data
-                uranusRing.getTransform().position = uranus.getTransform().position;
-                uranusRing.getTransform().rotation = uranus.getTransform().rotation;
-                uranusRing.getTransform().localScale = new Vector3(scale, scale, scale);
+                uranusRing.GetTransform().position = uranus.GetTransform().position;
+                uranusRing.GetTransform().rotation = uranus.GetTransform().rotation;
+                uranusRing.GetTransform().localScale = new Vector3(scale, scale, scale);
             }
         }
 
@@ -415,22 +409,22 @@ namespace SolarSystem.Model
         /// </summary>
         /// <param name="scale"></param>
         /// <param name="focused"></param>
-        public static void changeSolarSystemScale(float scale, bool focused = false)
+        public static void ChangeSolarSystemScale(float scale, bool focused = false)
         {
-            changeObjectsScale(scale, focused);
+            ChangeObjectsScale(scale, focused);
 
             var scaling = planetScale;
 
-            foreach (var planet in solarSystemObjects.objects())
+            foreach (var planet in solarSystemObjects.Objects())
             {
-                var type = planet.objectType();
+                var type = planet.ObjectType();
                 var s = 0.0f;
 
                 switch (type)
                 {
                     case Objects.Sun:
-                        s = SolarParser.parseSolarObjectsRadius(type) * scaling / 80.0f;
-                        planet.getTransform().localScale = new Vector3(s, s, s);
+                        s = SolarParser.ParseSolarObjectsRadius(type) * scaling / 80.0f;
+                        planet.GetTransform().localScale = new Vector3(s, s, s);
                         break;
 
                     case Objects.Mercury:
@@ -443,18 +437,18 @@ namespace SolarSystem.Model
                     case Objects.Neptune:
                     case Objects.Pluto:
                     case Objects.Moon:
-                        s = SolarParser.parseSolarObjectsRadius(type) * scaling;
-                        planet.getTransform().localScale = new Vector3(s, s, s);
+                        s = SolarParser.ParseSolarObjectsRadius(type) * scaling;
+                        planet.GetTransform().localScale = new Vector3(s, s, s);
                         break;
 
                     case Objects.SaturnRing:
-                        saturnRingOuterRadius = saturnRingOuterRadius * scaling;
-                        saturnRingInnerRadius = saturnRingInnerRadius * scaling;
+                        saturnRingOuterRadius *= scaling;
+                        saturnRingInnerRadius *= scaling;
                         break;
 
                     case Objects.UranusRing:
-                        uranusRingInnerRadius = uranusRingInnerRadius * scaling;
-                        uranusRingOuterRadius = uranusRingOuterRadius * scaling;
+                        uranusRingInnerRadius *= scaling;
+                        uranusRingOuterRadius *= scaling;
                         break;
                     default:
                         break;
@@ -466,7 +460,7 @@ namespace SolarSystem.Model
         /// Sets current solar system speed
         /// </summary>
         /// <param name="speed"></param>
-        public static void setSolarSystemSpeed(float speed)
+        public static void SetSolarSystemSpeed(float speed)
         {
             daysPerFrameScale = speed;
         }
@@ -475,7 +469,7 @@ namespace SolarSystem.Model
         /// Returns solar speed
         /// </summary>
         /// <returns></returns>
-        public static double solarSpeed()
+        public static double SolarSpeed()
         {
             return daysPerFrameScale;
         }
@@ -483,28 +477,28 @@ namespace SolarSystem.Model
         /// <summary>
         /// Stops math model
         /// </summary>
-        public static void stopModel()
+        public static void StopModel()
         {
             if (daysPerFrameScale != 0)
                 savedDaysPerFrameScale = daysPerFrameScale;
 
-            setSolarSystemSpeed(0);
+            SetSolarSystemSpeed(0);
         }
 
         /// <summary>
         /// Resumes math model
         /// </summary>
-        public static void resumeModel()
+        public static void ResumeModel()
         {
             if (savedDaysPerFrameScale != 0)
-                setSolarSystemSpeed((float)savedDaysPerFrameScale);
+                SetSolarSystemSpeed((float)savedDaysPerFrameScale);
         }
 
         /// <summary>
         /// Returns current solar date
         /// </summary>
         /// <returns></returns>
-        public static DateTime date()
+        public static DateTime Date()
         {
             return solarTime;
         }
@@ -513,7 +507,7 @@ namespace SolarSystem.Model
         /// Sets current frame delta time
         /// </summary>
         /// <param name="dt"></param>
-        public static void setDeltaTime(float dt)
+        public static void SetDeltaTime(float dt)
         {
             deltaTime = dt;
         }
@@ -524,7 +518,7 @@ namespace SolarSystem.Model
         /// <param name="obj"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        private static float calculateZoomLimit(Objects obj, float limit)
+        private static float CalculateZoomLimit(Objects obj, float limit)
         {
             var finalLimit = limit;
 
@@ -558,13 +552,13 @@ namespace SolarSystem.Model
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static float calculateZoomLimit(Objects obj)
+        private static float CalculateZoomLimit(Objects obj)
         {
-            var solarObjRadius = SolarParser.parseSolarObjectsRadius(obj);
+            var solarObjRadius = SolarParser.ParseSolarObjectsRadius(obj);
             var zoomLimit = planetScale * solarObjRadius * 4.0f;
 
             //empiric calculations
-            return calculateZoomLimit(obj, zoomLimit);
+            return CalculateZoomLimit(obj, zoomLimit);
         }
 
         /// <summary>
@@ -572,14 +566,14 @@ namespace SolarSystem.Model
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static Vector3 viewPositionOfObject(Objects obj)
+        public static Vector3 ViewPositionOfObject(Objects obj)
         {
-            var solarObj = solarSystemObjects.getObject(obj);
+            var solarObj = solarSystemObjects.GetObject(obj);
             var pos = Vector3.zero;
 
             if (solarObj != null)
             {
-                var solarObjPos = solarObj.getTransform().position;
+                var solarObjPos = solarObj.GetTransform().position;
 
                 //vector on object
                 var onSolarObject = solarObjPos - cameraController.Camera.transform.position;
@@ -588,7 +582,7 @@ namespace SolarSystem.Model
                 var dist = onSolarObject.magnitude;
 
                 //calculate need dist to camera
-                var limit = calculateZoomLimit(obj);
+                var limit = CalculateZoomLimit(obj);
                 var needDist = Math.Abs(dist - limit);
 
                 //get position

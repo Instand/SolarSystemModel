@@ -46,7 +46,7 @@ namespace SolarSystem.Controller
         }
 
         //active helper
-        private IEnumerator activateModel()
+        private IEnumerator ActivateModel()
         {
             yield return new WaitForSeconds(activateModelDelta);
         }
@@ -56,7 +56,7 @@ namespace SolarSystem.Controller
         {
             if (animated)
             {
-                var onTarget = solarObject.getTransform().position - transform.position;
+                var onTarget = solarObject.GetTransform().position - transform.position;
 
                 //rotation
                 transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(transform.forward, onTarget, rotationSpeed * Time.deltaTime, 10.0f));
@@ -76,7 +76,7 @@ namespace SolarSystem.Controller
 
                     SolarMathModel.CameraController.Active = true;
                     //SolarMathModel.CameraController.updateCamera();
-                    SolarMathModel.resumeModel();
+                    SolarMathModel.ResumeModel();
                 }
             }
         }
@@ -85,16 +85,16 @@ namespace SolarSystem.Controller
         /// Animates camera on obj
         /// </summary>
         /// <param name="obj"></param>
-        public void lookAt(Objects obj)
+        public void LookAt(Objects obj)
         {
-            solarObject = SolarMathModel.container3D().getObject(obj);
+            solarObject = SolarMathModel.Container3D().GetObject(obj);
 
             if (solarObject != null)
             {
                 //calculation
-                target = SolarMathModel.viewPositionOfObject(obj);
-                distance = Vector3.Distance(solarObject.getTransform().position, target);
-                SolarMathModel.stopModel();
+                target = SolarMathModel.ViewPositionOfObject(obj);
+                distance = Vector3.Distance(solarObject.GetTransform().position, target);
+                SolarMathModel.StopModel();
 
                 animated = true;
                 currentCameraSpeed = cameraSpeed;

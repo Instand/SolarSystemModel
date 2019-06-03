@@ -2,7 +2,6 @@
 
 namespace SolarSystem.MathObjects
 {
-    //simple factory
     public static class MathObjectsFactory
     {
         /// <summary>
@@ -10,7 +9,7 @@ namespace SolarSystem.MathObjects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T create<T>() where T : AbstractObject, new()
+        public static T Create<T>() where T : AbstractObject, new()
         {
             return new T();
         }

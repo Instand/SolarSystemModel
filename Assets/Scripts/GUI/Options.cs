@@ -39,11 +39,11 @@ namespace SolarSystem.GUI
             graphicsText.text = qualityNames[currentGraphicsLevel];
 
             antialiasingText = antialiasingButton.GetComponentInChildren<Text>();
-            antialiasingText.text = getAntialiasingString(antialiasing);
+            antialiasingText.text = GetAntialiasingString(antialiasing);
         }
 
         //returns string representation of antialiasing
-        private string getAntialiasingString(int value)
+        private string GetAntialiasingString(int value)
         {
             switch (value)
             {
@@ -65,7 +65,7 @@ namespace SolarSystem.GUI
         }
 
         //next step
-        private void addAntialiasing()
+        private void AddAntialiasing()
         {
             switch (antialiasing)
             {
@@ -90,7 +90,7 @@ namespace SolarSystem.GUI
             }
         }
 
-        private void checkAntialiasing()
+        private void CheckAntialiasing()
         {
             if (antialiasing > 8)
                 antialiasing = 0;
@@ -99,12 +99,12 @@ namespace SolarSystem.GUI
         /// <summary>
         /// Antialiasing button clicked
         /// </summary>
-        public void onAntialiasingClicked()
+        public void OnAntialiasingClicked()
         {
             //ui
-            addAntialiasing();
-            checkAntialiasing();
-            antialiasingText.text = getAntialiasingString(antialiasing);
+            AddAntialiasing();
+            CheckAntialiasing();
+            antialiasingText.text = GetAntialiasingString(antialiasing);
 
             //apply
             QualitySettings.antiAliasing = antialiasing;
@@ -113,7 +113,7 @@ namespace SolarSystem.GUI
         /// <summary>
         /// Change graphics
         /// </summary>
-        public void onGraphicsClicked()
+        public void OnGraphicsClicked()
         {
             ++currentGraphicsLevel;
 
@@ -131,22 +131,22 @@ namespace SolarSystem.GUI
         /// Change solar system speed
         /// </summary>
         /// <param name="value"></param>
-        public void onSolarSpeedChanged()
+        public void OnSolarSpeedChanged()
         {
             var result = Values.startSpeed * speedSlider.value * 0.02f;
 
-            SolarMathModel.setSolarSystemSpeed(result);
+            SolarMathModel.SetSolarSystemSpeed(result);
         }
 
         /// <summary>
         /// Change solar system scale
         /// </summary>
         /// <param name="value"></param>
-        public void onSolarScaleChanged()
+        public void OnSolarScaleChanged()
         {
             var result = Values.startSize * scaleSlider.value * 0.02f;
 
-            SolarMathModel.changeSolarSystemScale(result);
+            SolarMathModel.ChangeSolarSystemScale(result);
         }
     }
 }
